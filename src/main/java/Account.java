@@ -1,6 +1,7 @@
 public abstract class Account {
     private double balance;
     public String name;
+    public double APR;
 
     public Account(String name, double startAmount) { //the name of the account
         this.name = name; //the current account holder's name
