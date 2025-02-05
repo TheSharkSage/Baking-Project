@@ -19,11 +19,6 @@ public abstract class Account {
         return accountId; //return the name of the account
     }
 
-    public Account(double start_amount, String accountId) {
-        this.balance=start_amount;
-        this.accountId = accountId;
-    }
-
 
     public double getBalance() {
         return balance;

@@ -4,9 +4,6 @@ import java.util.Map;
 public class Bank {
     private Map<String, Account> accounts = new HashMap<>();
 
-    public Bank()  {
-        this.accounts = new HashMap<>();//a key for the account in the bank
-    }
     public Map<String, Account> getAccounts() {//a list of all the accounts stored, with a key to each account
         return new HashMap<>(accounts);//retrieve bank account info
     }
