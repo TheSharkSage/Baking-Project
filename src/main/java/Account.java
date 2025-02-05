@@ -26,12 +26,15 @@ public abstract class Account {
         //return -1; //used for failed test cases
     }
 
+    public void setBalance(double newBalance) {
+        this.balance = newBalance;
+    }
     public double getAPR() {
         return APR;
     }
 
-    public void setBalance(double newBalance) {
-        this.balance = newBalance;
+    public void setAPR(double setAPR) {
+        this.APR = setAPR;
     }
 
     public void deposit(double money) {

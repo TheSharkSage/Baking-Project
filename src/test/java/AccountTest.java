@@ -7,14 +7,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class AccountTest {
     public static final double APR = 10.0;
     public static final int MONEY_AMOUNT = 20;
-    public static final String NAME = "Carmelo";
+    public static final String QUICK_ID = "12345678";
     //all banks require an 8-digit ID, an APR value from 0-10(decimals included)
     Account checkings; //reference for any calls to an account
 
 
     @BeforeEach
     public void setUp() {
-        checkings = new Checkings(NAME);
+        checkings = new Checkings(QUICK_ID);
     }
 
     @Test
@@ -26,6 +26,7 @@ public class AccountTest {
 
     @Test
     public void checking_account_with_specific_APR() {
+        checkings.setAPR(APR);
         double actual = checkings.getAPR(); //check is the apr on the account is correct
 
         assertEquals(APR,actual);
