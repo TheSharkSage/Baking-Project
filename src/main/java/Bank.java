@@ -4,24 +4,46 @@ import java.util.Map;
 public class Bank {
     private Map<String, Account> accounts = new HashMap<>();
 
-    public Bank(String ID)  {
-        accounts = new HashMap<>();//a key for the account in the bank
+    public Bank()  {
+        this.accounts = new HashMap<>();//a key for the account in the bank
     }
     public Map<String, Account> getAccounts() {//a list of all the accounts stored, with a key to each account
-        return accounts;//retrieve bank account info
+        return new HashMap<>(accounts);//retrieve bank account info
     }
+    //make a method that looks for an id based off a number
 
     //Make a method for each account that can be made
 
-    public void addCheckings(String quickId, String name) { //add an account by using the keys of an id and a name
-        accounts.put(quickId, new Checkings(name));
+    public void addAccount(Account account) {
+        if (account == null) {
+            throw new IllegalArgumentException("Account cannot be null");
+        }
+        accounts.put(account.getAccountId(), account);
     }
 
-    public void addSavings(String quickId, String name) {
-        accounts.put(quickId, new Savings(name));
+    public void deposit(String accountId, double amount) {
+        Account account = findAccount(accountId);
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Deposit amount must be greater than 0");
+        }
+        account.setBalance(account.getBalance() + amount);
     }
 
-    public void addCD(String quickId, double amount) {
-        accounts.put(quickId, new CD(amount));
+    public void withdraw(String accountId, double amount) {
+        Account account = findAccount(accountId);
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Deposit amount must be greater than 0");
+        }
+        account.setBalance(account.getBalance() - amount);
     }
+
+    public Account findAccount(String accountId) {
+        Account account = accounts.get(accountId);
+        if (account == null) {
+            throw new IllegalArgumentException("Account not found: " + accountId);
+        }
+        return account;
+    }
+
 }
+
