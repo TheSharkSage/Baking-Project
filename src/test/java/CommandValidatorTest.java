@@ -11,7 +11,6 @@ public class CommandValidatorTest {
     private Account checkings;
     private Account savings;
 
-
     @BeforeEach
     void setUp() {
         bank = new Bank();
