@@ -57,13 +57,11 @@ public class CommandValidatorTest {
         assertFalse(actual);
     }
 
-
     @Test
     void null_command_is_invalid() {
         boolean actual = commandValidator.validate(null);
         assertFalse(actual);
     }
-
 
     @Test
     void empty_command_is_invalid() {
@@ -77,12 +75,64 @@ public class CommandValidatorTest {
         assertFalse(actual);
     }
 
-
     @Test
     void cd_invalid_apr_with_letters_is_invalid() {
         boolean actual = commandValidator.validate("Create CD 12345678 ABC%");
         assertFalse(actual);
     }
 
+    @Test
+    void cd_negative_apr_is_invalid() {
+        boolean actual = commandValidator.validate("Create CD 12345678 -5.0");
+        assertFalse(actual);
+    }
+
+    @Test
+    void cd_invalid_initial_amount_with_letters_is_invalid() {
+        boolean actual = commandValidator.validate("Create CD 12345678 5.0 ABC");
+        assertFalse(actual);
+    }
+
+    @Test
+    void cd_negative_initial_amount_is_invalid() {
+        boolean actual = commandValidator.validate("Create CD 12345678 5.0 -1000");
+        assertFalse(actual);
+    }
+
+    @Test
+    void cd_valid_parameters_is_valid() {
+        boolean actual = commandValidator.validate("Create CD 12345678 5.0 1000");
+        assertTrue(actual);
+    }
+
+    @Test
+    void cd_missing_apr_is_invalid() {
+        boolean actual = commandValidator.validate("Create CD 12345678");
+        assertFalse(actual);
+    }
+
+    @Test
+    void cd_missing_initial_amount_is_invalid() {
+        boolean actual = commandValidator.validate("Create CD 12345678 5.0");
+        assertFalse(actual);
+    }
+
+    @Test
+    void cd_extra_parameters_is_invalid() {
+        boolean actual = commandValidator.validate("Create CD 12345678 5.0 1000 extraParam");
+        assertFalse(actual);
+    }
+
+    @Test
+    void cd_mixed_case_with_valid_parameters_is_valid() {
+        boolean actual = commandValidator.validate("CrEaTe Cd 12345678 5.0 1000");
+        assertTrue(actual);
+    }
+
+    @Test
+    void cd_all_lowercase_with_valid_parameters_is_valid() {
+        boolean actual = commandValidator.validate("create cd 12345678 5.0 1000");
+        assertTrue(actual);
+    }
 
 }
