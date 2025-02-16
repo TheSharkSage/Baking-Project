@@ -34,6 +34,8 @@ public class Bank {
         account.setBalance(account.getBalance() - amount);
     }
 
+    //Command method to ask for account
+
     public Account findAccount(String accountId) {
         Account account = accounts.get(accountId);
         if (account == null) {
@@ -42,5 +44,10 @@ public class Bank {
         return account;
     }
 
+    //Query method to check for existence
+
+    public boolean accountExistsByID(String accountId) {
+        return accounts.get(accountId) != null;//boolean to check the existence of account
+    }
 }
 
