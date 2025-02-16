@@ -7,19 +7,23 @@ public class CommandValidator {
     }
 
     public boolean validate(String command) {
+        if (command == null) {
+            return false;
+        }
         String[] parts = command.split(" ");
+
+        // Validate command format
+
+
+        if (parts.length < 3) {
+            return false;
+        }
+
         String bankCommand = parts[0];//store the initally given commands
         String accountType = parts[1];
         // Extract the account ID from the command
         String accountId = parts[2];
-        // Validate command format
-        if (command == null) {
-            return false;
-        }
 
-        if (parts.length != 3) {
-            return false;
-        }
         //check for bounds
         if (!accountId.matches("\\d{8}")) {
             return false;
