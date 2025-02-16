@@ -51,6 +51,25 @@ public class CommandValidatorTest {
         assertFalse(actual);
     }
 
+    @Test
+    void missing_account_id() {
+        boolean actual = commandValidator.validate("create checkings ");
+        assertFalse(actual);
+    }
+
+
+    @Test
+    void null_command_is_invalid() {
+        boolean actual = commandValidator.validate(null);
+        assertFalse(actual);
+    }
+
+
+    @Test
+    void empty_command_is_invalid() {
+        boolean actual = commandValidator.validate("");
+        assertFalse(actual);
+    }
 
 
 }

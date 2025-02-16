@@ -22,8 +22,10 @@ public class CommandValidator {
         }
 
 
-        // Check if account already exists
-        return !bank.accountExistsByID(accountId);
+        // Check for any errors in command validation fields
+        return (!bank.accountExistsByID(accountId)) &&
+                (isValidAccount(accountType)) &&
+                (isValidCommand(bankCommand));
     }
 
     public boolean isValidCommand(String bankCommand) {//compare the pattern
