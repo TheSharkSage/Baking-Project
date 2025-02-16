@@ -13,10 +13,14 @@ public class CommandValidator {
         // Extract the account ID from the command
         String accountId = parts[2];
         // Validate command format
-        if (parts.length != 3) {
+        if (command == null) {
             return false;
         }
 
+        if (parts.length != 3) {
+            return false;
+        }
+        //check for bounds
         if (!accountId.matches("\\d{8}")) {
             return false;
         }
@@ -65,9 +69,9 @@ public class CommandValidator {
 
 
     public boolean isValidCommand(String bankCommand) {//compare the pattern
-        return bankCommand.equalsIgnoreCase("Checkings") ||
-                bankCommand.equalsIgnoreCase("Savings") ||
-                bankCommand.equalsIgnoreCase("CD");
+        return bankCommand.equalsIgnoreCase("create") ||
+                bankCommand.equalsIgnoreCase("withdraw") ||
+                bankCommand.equalsIgnoreCase("deposit");
     }
 
     public boolean isValidAccount(String accountType) {
