@@ -21,12 +21,48 @@ public class CommandValidator {
             return false;
         }
 
+        //check for duplicate
+        if (bank.accountExistsByID(accountId)) {
+            return false;
+        }
 
-        // Check for any errors in command validation fields
-        return (!bank.accountExistsByID(accountId)) &&
-                (isValidAccount(accountType)) &&
-                (isValidCommand(bankCommand));
+        if (!isValidAccount(accountType)) {
+            return false;
+        }
+
+        //validate the existence of account
+        if (accountType.equalsIgnoreCase("CD")) {
+            return validateCDParameters(parts);
+        }
+
+        return parts.length == 3;//parameter check for non cd accounts
     }
+
+    private boolean validateCDParameters(String[] parts) {
+        //CD accounts require 5 inputs: Create CD APR accountID APR amount
+        if (parts.length != 5) {
+            return false;
+        }
+
+        try {
+            //read the APR field as a double
+            double apr = Double.parseDouble(parts[3]);
+            if (apr < 0) {
+                return false;
+            }
+
+            //check initial amount
+            double amount = Double.parseDouble(parts[4]);
+            if (amount <= 0) {
+                return false;
+            }
+
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
 
     public boolean isValidCommand(String bankCommand) {//compare the pattern
         return bankCommand.equalsIgnoreCase("Checkings") ||

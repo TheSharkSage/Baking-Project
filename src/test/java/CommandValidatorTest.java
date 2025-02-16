@@ -71,5 +71,18 @@ public class CommandValidatorTest {
         assertFalse(actual);
     }
 
+    @Test
+    void command_with_extra_spaces_is_invalid() {
+        boolean actual = commandValidator.validate("Create  Savings  12345678");
+        assertFalse(actual);
+    }
+
+
+    @Test
+    void cd_invalid_apr_with_letters_is_invalid() {
+        boolean actual = commandValidator.validate("Create CD 12345678 ABC%");
+        assertFalse(actual);
+    }
+
 
 }
