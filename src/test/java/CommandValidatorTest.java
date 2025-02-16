@@ -33,5 +33,10 @@ public class CommandValidatorTest {
         assertFalse(actual);
     }
 
+    @Test
+    void create_account_is_spelled_wrong() {
+        boolean actual = commandValidator.isValidCommand("kreeight checkings 12345678");
+        assertFalse(actual);
+    }
 
 }
