@@ -45,5 +45,12 @@ public class CommandValidatorTest {
         assertFalse(actual);
     }
 
+    @Test
+    void account_id_out_of_bounds() {
+        boolean actual = commandValidator.validate("Create Savings 123456787654321");
+        assertFalse(actual);
+    }
+
+
 
 }

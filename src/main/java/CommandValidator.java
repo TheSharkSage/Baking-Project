@@ -17,6 +17,11 @@ public class CommandValidator {
             return false;
         }
 
+        if (!accountId.matches("\\d{8}")) {
+            return false;
+        }
+
+
         // Check if account already exists
         return !bank.accountExistsByID(accountId);
     }
