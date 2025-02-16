@@ -27,4 +27,9 @@ public class CommandValidator {
                 bankCommand.equalsIgnoreCase("CD");
     }
 
+    public boolean isValidAccount(String accountType) {
+        return accountType.equalsIgnoreCase("Checkings") ||
+                accountType.equalsIgnoreCase("Savings") ||
+                accountType.equalsIgnoreCase("CD");
+    }
 }

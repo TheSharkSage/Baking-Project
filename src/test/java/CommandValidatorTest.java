@@ -39,4 +39,11 @@ public class CommandValidatorTest {
         assertFalse(actual);
     }
 
+    @Test
+    void account_type_is_invalid() {
+        boolean actual = commandValidator.isValidAccount("Create highyieldsavings 12345678");
+        assertFalse(actual);
+    }
+
+
 }
