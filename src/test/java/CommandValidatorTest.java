@@ -134,4 +134,95 @@ public class CommandValidatorTest {
         assertTrue(actual);
     }
 
+    @Test
+    void create_savings_with_invalid_parameters() {
+        boolean actual = commandValidator.validate("Create savings 123abc45");
+        assertFalse(actual);
+    }
+
+    @Test
+    void create_cd_without_money() {
+        boolean actual = commandValidator.validate("Create CD 0");
+        assertFalse(actual);
+    }
+
+    @Test
+    void create_account_with_invalid_characters_in_name() {
+        boolean actual = commandValidator.validate("Create checking 12345678 C@rm3l0");
+        assertFalse(actual);
+    }
+
+    @Test
+    void create_account_with_too_many_numbers() {
+        boolean actual = commandValidator.validate("Create Saving 1123458909876543321 Carmelo");
+        assertFalse(actual);
+    }
+
+    @Test
+    void deposit_with_cents() {
+        bank.addAccount(checkings);
+        boolean actual = commandValidator.validate("Deposit 12345678 20.64");
+        assertTrue(actual);
+    }
+
+    @Test
+    void deposit_large_amount() {
+        bank.addAccount(checkings);
+        boolean actual = commandValidator.validate("Deposit 12345678 999999999.99");
+        assertTrue(actual);
+    }
+
+    @Test
+    void withdraw_large_amount() {
+        bank.addAccount(checkings);
+        checkings.deposit(1000000000.00); // Ensure sufficient balance
+        boolean actual = commandValidator.validate("Withdraw 12345678 999999999.99");
+        assertTrue(actual);
+    }
+
+    @Test
+    void deposit_to_nonexistent_account() {
+        boolean actual = commandValidator.validate("Deposit 987654321 20");
+        assertFalse(actual);
+    }
+
+    @Test
+    void withdraw_negative_amount() {
+        bank.addAccount(checkings);
+        checkings.deposit(100.0);
+        boolean actual = commandValidator.validate("Withdraw -100");
+        assertFalse(actual);
+    }
+
+    @Test
+    void multiple_transactions_sequence() {
+        bank.addAccount(checkings);
+
+        assertTrue(commandValidator.validate("Deposit 12345678 100"));
+        assertTrue(commandValidator.validate("Deposit 12345678 500"));
+        assertTrue(commandValidator.validate("Withdraw 12345678 300"));
+        assertTrue(commandValidator.validate("Withdraw 12345678 73"));
+    }
+
+    @Test
+    void multiple_withdrawals_to_zero() {
+        bank.addAccount(checkings);
+        checkings.deposit(100.0);
+
+        assertTrue(commandValidator.validate("Withdraw 12345678 100"));
+        assertTrue(commandValidator.validate("Withdraw 12345678 100"));
+    }
+
+    @Test
+    void create_account_with_apr_exceeding_ten() {
+        boolean actual = commandValidator.validate("Create checkings 12345678 11.0");
+        assertFalse(actual);
+    }
+
+    @Test
+    void get_apr_missing_account() {
+        boolean actual = commandValidator.validate("getAPR");
+        assertFalse(actual);
+    }
+
 }

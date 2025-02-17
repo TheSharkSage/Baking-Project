@@ -10,40 +10,90 @@ public class CommandValidator {
         if (command == null) {
             return false;
         }
+        //split string into parts and check each one
         String[] parts = command.split(" ");
 
-        // Validate command format
-
-
+        // Validate length of command format
         if (parts.length < 3) {
             return false;
         }
 
-        String bankCommand = parts[0];//store the initally given commands
-        String accountType = parts[1];
-        // Extract the account ID from the command
+
+        String bankCommand = parts[0].toLowerCase();//store the initally given commands
+//        String accountType = parts[1];
+//        // Extract the account ID from the command
+//        String accountId = parts[2];
+
+
+        // Validate based on command type
+        switch (bankCommand) {
+            case "create":
+                return validateCreateCommand(parts);
+            case "deposit":
+            case "withdraw":
+                return validateTransactionCommand(parts);
+            case "getapr":
+                return validateGetAprCommand(parts);
+            default:
+                return false;
+        }
+    }
+
+    private boolean validateGetAprCommand(String[] parts) {
+        if (parts.length != 2) {
+            return false;
+        }
+        return bank.accountExistsByID(parts[1]);
+    }
+
+    private boolean validateCreateCommand(String[] parts) {
+        // Basic length check for create command
+        if (parts.length < 3) {
+            return false;
+        }
+
+        String accountType = parts[1].toLowerCase();
         String accountId = parts[2];
 
-        //check for bounds
+        // Validate account ID format (8 digits)
         if (!accountId.matches("\\d{8}")) {
             return false;
         }
 
-        //check for duplicate
+        // Check for duplicate account
         if (bank.accountExistsByID(accountId)) {
             return false;
         }
 
-        if (!isValidAccount(accountType)) {
-            return false;
-        }
-
-        //validate the existence of account
-        if (accountType.equalsIgnoreCase("CD")) {
+        // Special handling for CD accounts
+        if (accountType.equals("cd")) {
             return validateCDParameters(parts);
         }
 
-        return parts.length == 3;//parameter check for non cd accounts
+        // For regular accounts (Savings/Checkings)
+        return parts.length == 3 && isValidAccount(accountType);
+    }
+
+    private boolean validateTransactionCommand(String[] parts) {
+        //command parts: action accoundID amount
+        if (parts.length != 3) {
+            return false;
+        }
+
+        String accountId = parts[1];
+        String amount = parts[2];
+
+        if (!bank.accountExistsByID(accountId)) {
+            return false;
+        }
+
+        //check for positive number and include decimals
+        try {
+            double value = Double.parseDouble(amount);
+            return value > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     private boolean validateCDParameters(String[] parts) {
@@ -81,6 +131,7 @@ public class CommandValidator {
     public boolean isValidAccount(String accountType) {
         return accountType.equalsIgnoreCase("Checkings") ||
                 accountType.equalsIgnoreCase("Savings") ||
-                accountType.equalsIgnoreCase("CD");
+                accountType.equalsIgnoreCase("CD") ||
+                accountType.equalsIgnoreCase("getapr");
     }
 }
