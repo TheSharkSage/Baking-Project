@@ -1,5 +1,5 @@
 public class Savings extends Account{
-    public Savings(String name) {
-        super(name, 0);
+    public Savings(String accId) {
+        super(accId, 0);
     }
 }

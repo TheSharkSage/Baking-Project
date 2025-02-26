@@ -12,8 +12,8 @@ public class BankTest {
     public static final String QUICK_ID = "12345678";
     public static final String QUICK_ID_2 = "87654321";
     Bank bank;
-    private Account checking;
-    private Account savings;
+    public Account checking;
+    public Account savings;
 
     @BeforeEach
     void setUp() {

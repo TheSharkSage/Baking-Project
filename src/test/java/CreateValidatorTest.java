@@ -9,7 +9,7 @@ public class CreateValidatorTest {
     private CreateValidator createValidator;
 
     private Bank bank;
-    private Account checking;
+    public Account checking;
 
     @BeforeEach
     void setUp() {

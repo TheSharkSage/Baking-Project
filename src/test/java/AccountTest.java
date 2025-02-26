@@ -9,7 +9,7 @@ public class AccountTest {
     public static final int MONEY_AMOUNT = 20;
     public static final String QUICK_ID = "12345678";
     //all banks require an 8-digit ID, an APR value from 0-10(decimals included)
-    private Account checking; //reference for any calls to an account
+    public Account checking; //reference for any calls to an account
 
 
     @BeforeEach
