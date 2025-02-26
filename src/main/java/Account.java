@@ -37,10 +37,9 @@ public abstract class Account {
         this.APR = setAPR;
     }
 
-    public void deposit(double money) {
+
+public void deposit(double money) {
         setBalance(getBalance() + money);
-
-
     }
 
     public void withdraw(double money) {
