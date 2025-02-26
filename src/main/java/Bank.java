@@ -2,7 +2,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Bank {
-    private Map<String, Account> accounts = new HashMap<>();
+    public Map<String, Account> accounts;
+
+    public Bank() {
+        accounts = new HashMap<>();
+    }
 
     public Map<String, Account> getAccounts() {//a list of all the accounts stored, with a key to each account
         return new HashMap<>(accounts);//retrieve bank account info

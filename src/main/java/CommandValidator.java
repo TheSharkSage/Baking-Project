@@ -1,18 +1,18 @@
 public class CommandValidator {
-    protected final Bank bank;
+    Bank bank;
 
     //constructor
     public CommandValidator(Bank bank) {
-        this.bank = bank;
+        bank = bank;
     }
 
     //template for validation
-    protected boolean validateSpecific(String[] command){
+    public boolean validateSpecific(String[] command){
         return false;
     }
 
 
-    protected int getMinimumPartsRequired() {
+    public int getMinimumPartsRequired() {
         return 3;
     }
 
@@ -48,7 +48,7 @@ public class CommandValidator {
         return validateSpecific(parts);
     }
 
-    protected boolean isValidAccountID(String accountId) {
+    public boolean isValidAccountID(String accountId) {
         //validate the proper id length
         return accountId != null && accountId.matches("\\d{8}");
     }
