@@ -9,9 +9,9 @@ public class MasterControl {
     public MasterControl(CommandValidator commandValidator,
                          CommandProcessor commandProcessor,
                          CommandStorage commandStorage) {
-        commandValidator = commandValidator;
-        commandProcessor = commandProcessor;
-        commandStorage = commandStorage;
+        this.commandValidator = commandValidator;
+        this.commandProcessor = commandProcessor;
+        this.commandStorage = commandStorage;
 
     }
 

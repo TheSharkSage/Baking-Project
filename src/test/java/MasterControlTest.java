@@ -47,15 +47,15 @@ public class MasterControlTest {
         assertEquals("depositt 12345678 100", actual.get(1));
     }
 
-//    @Test
-//    void invaild_to_create_account_with_same_ID() {
-//        input.add("create checking 12345678 1.0");
-//        input.add("create checking 12345678 1.0");
-//
-//        List<String> actual = masterControl.start(input);
-//
-//        assertSingleCommand("create checking 12345678 1.0", actual);
-//    }
+   @Test
+   void invaild_to_create_accounts_with_same_ID() {
+       input.add("create checking 12345678 1.0");
+       input.add("create checking 12345678 1.0");
+
+       List<String> actual = masterControl.start(input);
+
+       assertSingleCommand("create checking 12345678 1.0", actual);
+   }
 
     private void assertSingleCommand(String command, List<String> actual) {
         assertEquals(1, actual.size());
