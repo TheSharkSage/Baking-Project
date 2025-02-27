@@ -2,13 +2,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Bank {
-    public Map<String, Account> accounts;
+    public Map<Integer, Account> accounts;
 
     public Bank() {
         accounts = new HashMap<>();
     }
 
-    public Map<String, Account> getAccounts() {//a list of all the accounts stored, with a key to each account
+    public Map<Integer, Account> getAccounts() {//a list of all the accounts stored, with a key to each account
         return new HashMap<>(accounts);//retrieve bank account info
     }
     //make a method that looks for an id based off a number
@@ -22,7 +22,7 @@ public class Bank {
         accounts.put(account.getAccountId(), account);
     }
 
-    public void deposit(String accountId, double amount) {
+    public void deposit(int accountId, double amount) {
         Account account = findAccount(accountId);
         if (amount <= 0) {
             throw new IllegalArgumentException("Deposit amount must be greater than 0");
@@ -30,7 +30,7 @@ public class Bank {
         account.setBalance(account.getBalance() + amount);
     }
 
-    public void withdraw(String accountId, double amount) {
+    public void withdraw(int accountId, double amount) {
         Account account = findAccount(accountId);
         if (amount <= 0) {
             throw new IllegalArgumentException("Deposit amount must be greater than 0");
@@ -40,7 +40,7 @@ public class Bank {
 
     //Command method to ask for account
 
-    public Account findAccount(String accountId) {
+    public Account findAccount(int accountId) {
         Account account = accounts.get(accountId);
         if (account == null) {
             throw new IllegalArgumentException("Account not found: " + accountId);
@@ -50,7 +50,7 @@ public class Bank {
 
     //Query method to check for existence
 
-    public boolean accountExistsByID(String accountId) {
+    public boolean accountExistsByID(int accountId) {
         return accounts.get(accountId) != null;//boolean to check the existence of account
     }
 }

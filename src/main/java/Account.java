@@ -1,21 +1,22 @@
 public abstract class Account {
     private double balance;
-    public final String accountId;
+    public final int accountId;
     public double APR;
 
-    public Account(String accountId, double startAmount) { //the name of the account
-        if(!isValidAccountId(accountId)) {
-            throw new IllegalArgumentException("Account ID must bw 8 digits");
-        }
+    public Account(int accountId, double startAmount) { //the name of the account
         this.accountId = accountId; //the current account holder's name
         this.balance = startAmount;
-}
-
-    private boolean isValidAccountId(String accountId) {
-        return accountId != null && accountId.matches("\\d{8}");
+    }
+    
+    //overloaded costructor
+    public Account(int accountId, double startAmount, double apr) { //the name of the account
+        this.accountId = accountId; //the current account holder's name
+        this.balance = startAmount;
+        this.APR = apr;
     }
 
-    public String getAccountId() {
+
+    public int getAccountId() {
         return accountId; //return the name of the account
     }
 
@@ -38,7 +39,7 @@ public abstract class Account {
     }
 
 
-public void deposit(double money) {
+    public void deposit(double money) {
         setBalance(getBalance() + money);
     }
 

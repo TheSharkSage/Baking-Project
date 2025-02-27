@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class AccountTest {
     public static final double APR = 11.0;
     public static final int MONEY_AMOUNT = 20;
-    public static final String QUICK_ID = "12345678";
+    public static final int QUICK_ID = 12345678;
     //all banks require an 8-digit ID, an APR value from 0-10(decimals included)
     public Account checking; //reference for any calls to an account
 

@@ -1,6 +1,11 @@
 public class CD extends Account{
-        public CD(String accountId, double start_amount) {
-            super(accountId, start_amount);
-        }
+    public CD(int accountId, double apr) {
+        super(accountId, 0, apr);
     }
+
+    public CD(int accId, double balance, double apr) {
+        super(accId, balance, apr);
+    }
+
+}
 
