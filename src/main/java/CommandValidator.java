@@ -1,13 +1,13 @@
 public class CommandValidator {
-    Bank bank;
+    protected Bank bank;
 
     //constructor
     public CommandValidator(Bank bank) {
-        bank = bank;
+        this.bank = bank;
     }
 
     //template for validation
-    public boolean validateSpecific(String[] command){
+    public boolean validateSpecific(String[] command) {
         return false;
     }
 
@@ -17,12 +17,12 @@ public class CommandValidator {
     }
 
 
-    public boolean validateGetAprCommand(String[] parts) {
-        if (parts.length != 2) {
-            return false;
-        }
-        return bank.accountExistsByID(parts[1]);
-    }
+    // public boolean validateGetAprCommand(String[] parts) {
+    //     if (parts.length != 2) {
+    //         return false;
+    //     }
+    //     return bank.accountExistsByID(parts[1]);
+    // }
 
 
    public boolean isValidAmount(String amount) {
@@ -33,7 +33,8 @@ public class CommandValidator {
         } catch (NumberFormatException e){
             return false;
         }
-   }
+    }
+
     //store the string into a list and access each element
     public boolean validate(String command) {
         //check for null

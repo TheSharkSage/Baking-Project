@@ -19,7 +19,7 @@ public class DepositValidator extends  CommandValidator{
         //store the specific command types
         //[deposit, accId, amount]
         String commandType = command[0].toLowerCase();
-        String accId = command[1];
+        String accIdStr = command[1];
         String amount = command[2];
 
 
@@ -31,13 +31,19 @@ public class DepositValidator extends  CommandValidator{
         }
 
         //run validation methods
-        if (!super.isValidAccountID(accId)) {
+        if (!super.isValidAccountID(accIdStr)) {
             System.out.println("Invalid account ID");
             return false;
         }
+        int accId = Integer.parseInt(accIdStr);
 
         if(bank.accountExistsByID(accId)) {
             System.out.println("Account ID already exists");
+            return false;
+        }
+
+        if (!super.isValidAmount(amount)) {
+            System.out.println("Invalid amount");
             return false;
         }
 

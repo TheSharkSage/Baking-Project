@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CreateValidatorTest {
-    private static final String ID = "12345678";
+    private static final int ID = 12345678;
     private CreateValidator createValidator;
 
     private Bank bank;

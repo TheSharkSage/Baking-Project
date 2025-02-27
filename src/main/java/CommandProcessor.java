@@ -39,8 +39,31 @@ public class CommandProcessor {
     private void processCreateCommand(String[] commandType) {
         //read teh create command and then execute it using the bank classes
         //sk for account, ask fork account, then process command
-        //bank.account
-        // todo: implement
+        //[create, accType, accId, ]
+        String type = commandType[1];
+        String id = commandType[2];
+        String apr = "";
+        if(commandType.length == 4) {
+            apr = commandType[3];
+        }
+
+        Account account = null;
+        
+        switch(type) {
+            case "checking":
+                account = new Checking(Integer.parseInt(id));
+                if(apr != "") {
+                    account.setAPR(Double.parseDouble(apr));
+                }
+            case "savings": 
+                account = new Savings(Integer.parseInt(id));
+                if(apr != "") {
+                    account.setAPR(Double.parseDouble(apr));
+                }
+            case "cd":
+                account = new CD(Integer.parseInt(id), Double.parseDouble(apr));
+        }
+        
 
     }
 

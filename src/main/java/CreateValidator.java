@@ -1,11 +1,9 @@
 public class CreateValidator extends CommandValidator {
 
-    //Bank bank;
-
     public CreateValidator(Bank bank) {
-    super(bank);
-    //this.bank = bank;
-}
+        super(bank);
+        //this.bank = bank;
+    }
     //override methods
 
     //commented out until other transaction validators are implemented
@@ -19,7 +17,7 @@ public class CreateValidator extends CommandValidator {
         //store teh specific account types
         String commandType = command[0].toLowerCase();
         String accType = command[1].toLowerCase();
-        String accId = command[2];
+        String accIdStr = command[2];
 
         //logic to allocate for apr commands
         if(command.length == 4) {
@@ -31,17 +29,17 @@ public class CreateValidator extends CommandValidator {
 
 
         //check for the specific command type
-
-
         if (!commandType.equals("create")) {
             return false;
         }
 
         //run validation methods
-        if (!super.isValidAccountID(accId)) {
+        if (!super.isValidAccountID(accIdStr)) {
             System.out.println("Invalid account ID");
             return false;
         }
+        int accId = Integer.parseInt(accIdStr);
+
 
         if(bank.accountExistsByID(accId)) {
             System.out.println("Account ID already exists");
