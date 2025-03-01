@@ -22,6 +22,7 @@ public class MasterControl {
                 commandProcessor.process(command);
             }
             else {
+
                 commandStorage.addInvalidCommand(command);
             }
 

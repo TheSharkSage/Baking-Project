@@ -31,7 +31,7 @@ public class DepositValidator extends  CommandValidator{
         }
 
         //run validation methods
-        if (!super.isValidAccountID(accIdStr)) {
+        if (!isValidAccountID(accIdStr)) {
             System.out.println("Invalid account ID");
             return false;
         }
@@ -51,5 +51,10 @@ public class DepositValidator extends  CommandValidator{
     }
 
     //Deposit validation helpers
+
+    public boolean isValidAccountID(String accountId) {
+        //validate the proper id length
+        return accountId != null && accountId.matches("\\d{8}");
+    }
 
 }

@@ -41,16 +41,16 @@ public class Bank {
     //Command method to ask for account
 
     public Account findAccount(int accountId) {
-        Account account = accounts.get(accountId);
-        if (account == null) {
-            throw new IllegalArgumentException("Account not found: " + accountId);
-        }
-        return account;
+        return accounts.get(accountId);
     }
 
     //Query method to check for existence
 
     public boolean accountExistsByID(int accountId) {
+        //check if account has already been made
+        if (!accounts.containsKey(accountId)){
+            return false;
+        }
         return accounts.get(accountId) != null;//boolean to check the existence of account
     }
 }

@@ -1,6 +1,9 @@
 public class CommandValidator {
     protected Bank bank;
 
+    //will defer all inputs to the childrne based on the first command
+    //recommended to use a switch case
+
     //constructor
     public CommandValidator(Bank bank) {
         this.bank = bank;
@@ -41,18 +44,39 @@ public class CommandValidator {
         if(command == null) return false;
         //split the string first
         String[] parts = command.split(" ");
+        String commandType = (parts[0].toLowerCase());
 
         // check if empty or exceeding string length and return result
         if (parts == null || parts.length < getMinimumPartsRequired()) {
             return false;
         }
-        return validateSpecific(parts);
+
+        //check for excessive whitespace
+        for (String part : parts) {
+            if (part.equals("")) {
+                return false;
+            }
+        }
+
+        //check the first field and delegate to child class
+        switch(commandType) {
+            case "create":
+                //instantiate a child to delegate command
+                CreateValidator create= new CreateValidator(bank);
+                return create.validateSpecific(parts);
+            case "deposit":
+                DepositValidator deposit = new DepositValidator(bank);
+                return deposit.validateSpecific(parts);
+            default:
+                //output when command syntax is valid but  type doesn't exist
+                //throw new IllegalArgumentException("Invalid Command Type");
+                return false;
+        }
+
+        // commandValidator object that is already instantiating child validators
+        //commandValidator.validate(command)
     }
 
-    public boolean isValidAccountID(String accountId) {
-        //validate the proper id length
-        return accountId != null && accountId.matches("\\d{8}");
-    }
 
 
 }

@@ -34,7 +34,7 @@ public class CreateValidator extends CommandValidator {
         }
 
         //run validation methods
-        if (!super.isValidAccountID(accIdStr)) {
+        if (!isValidAccountID(accIdStr)) {
             System.out.println("Invalid account ID");
             return false;
         }
@@ -67,7 +67,6 @@ public class CreateValidator extends CommandValidator {
                 accType.equalsIgnoreCase("Savings") ||
                 accType.equalsIgnoreCase("CD");
     }
-
 
     
 
@@ -103,6 +102,11 @@ public class CreateValidator extends CommandValidator {
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    public boolean isValidAccountID(String accountId) {
+        //validate the proper id length
+        return accountId != null && accountId.matches("\\d{8}");
     }
 
 

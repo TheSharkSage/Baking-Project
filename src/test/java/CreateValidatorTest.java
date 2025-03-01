@@ -27,7 +27,7 @@ public class CreateValidatorTest {
 
     @Test
     void duplicate_account_id_is_invalid() {
-        //savings = new Savings(ID);
+        //Account savings = new Savings(ID);
         bank.addAccount(checking);
         boolean actual = createValidator.validate("Create Savings 12345678");
         assertFalse(actual);

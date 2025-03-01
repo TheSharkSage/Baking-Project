@@ -9,8 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BankTest {
 
-    public static final String QUICK_ID = "12345678";
-    public static final String QUICK_ID_2 = "87654321";
+    public static final int QUICK_ID = 12345678;
+    public static final int QUICK_ID_2 = 87654321;
     Bank bank;
     public Account checking;
     public Account savings;
