@@ -27,7 +27,6 @@ public class CreateValidator extends CommandValidator {
             }
         }
 
-
         //check for the specific command type
         if (!commandType.equals("create")) {
             return false;

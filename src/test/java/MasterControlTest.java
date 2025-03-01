@@ -61,4 +61,5 @@ public class MasterControlTest {
         assertEquals(1, actual.size());
         assertEquals(command, actual.get(0));
     }
+
 }

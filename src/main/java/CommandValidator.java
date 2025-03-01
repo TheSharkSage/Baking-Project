@@ -72,9 +72,6 @@ public class CommandValidator {
                 //throw new IllegalArgumentException("Invalid Command Type");
                 return false;
         }
-
-        // commandValidator object that is already instantiating child validators
-        //commandValidator.validate(command)
     }
 
 
