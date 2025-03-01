@@ -10,4 +10,13 @@ public class Savings extends Account{
     public Savings(int accId, double balance, double apr) {
         super( accId, balance, apr);
     }
+
+    @Override
+    public void deposit(double money) {
+        if (money > 2500) {
+            System.out.println("Amount exceeds 2500");
+        }
+
+        setBalance(getBalance() + money);
+    }
 }

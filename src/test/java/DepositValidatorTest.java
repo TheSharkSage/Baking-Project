@@ -16,26 +16,32 @@ public class DepositValidatorTest {
         bank = new Bank();
         checking = new Checking(ID);
         depositValidator = new CommandValidator(bank);
-        bank.addAccount(checking);
     }
 
+    @Test
+    void deposit_to_empty_bank() {
+        //bank starts as empty in the setup
+        boolean actual = depositValidator.validate("deposit 12345678 20.00");
+        assertFalse(actual);
+    }
 
     @Test
     void deposit_with_cents() {
-        //bank.addAccount(checking);
+        bank.addAccount(checking);
         boolean actual = depositValidator.validate("Deposit 12345678 20.64");
         assertTrue(actual);
     }
 
     @Test
     void deposit_large_amount() {
-        //bank.addAccount(checking);
+        bank.addAccount(checking);
         boolean actual = depositValidator.validate("Deposit 12345678 999999999.99");
         assertTrue(actual);
     }
 
     @Test
     void deposit_negative_value() {
+        bank.addAccount(checking);
         boolean actual = depositValidator.validate("Deposit 12345678 -100.00");
         assertFalse(actual);
     }
@@ -43,6 +49,24 @@ public class DepositValidatorTest {
     @Test
     void deposit_command_has_typo() {
         boolean actual = depositValidator.validate("deeposi 12345678 20.00");
+        assertFalse(actual);
+    }
+
+    @Test
+    void deposit_command_in_wrong_order() {
+        boolean actual = depositValidator.validate("12345678 20.00 deposit");
+        assertFalse(actual);
+    }
+
+    @Test
+    void deposit_incorrect_amount_type() {
+        boolean actual = depositValidator.validate("deposit 12345678 twenty dollars");
+        assertFalse(actual);
+    }
+
+    @Test
+    void deposit_to_savings_exceeds_2500() {
+        boolean actual = depositValidator.validate("deposit 12345678 3000.00");
         assertFalse(actual);
     }
 
@@ -68,6 +92,5 @@ public class DepositValidatorTest {
         assertTrue(depositValidator.validate("Deposit 12345678 500"));
     }
 
-    //todo implement zombies approach
     
 }

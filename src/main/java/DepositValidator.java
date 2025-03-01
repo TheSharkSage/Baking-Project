@@ -23,6 +23,10 @@ public class DepositValidator extends  CommandValidator{
         String amount = command[2];
 
 
+        if(bank.accounts.isEmpty()) {
+            return false;
+        }
+
         //check for the specific command type
 
 
@@ -42,6 +46,8 @@ public class DepositValidator extends  CommandValidator{
             return false;
         }
 
+
+
         if (!super.isValidAmount(amount)) {
             System.out.println("Invalid amount");
             return false;
@@ -56,5 +62,7 @@ public class DepositValidator extends  CommandValidator{
         //validate the proper id length
         return accountId != null && accountId.matches("\\d{8}");
     }
+
+
 
 }
