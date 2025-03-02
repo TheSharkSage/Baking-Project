@@ -5,12 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CDTest{
     public static final double INIT_BALANCE = 170.56;
-    public static final String QUICK_ID = "12345678";
+    public static final int QUICK_ID = 12345678;
+    public static final double APR = 10.0;
     Account cd;
 
     @BeforeEach
     public void setUp(){
-        cd = new CD(QUICK_ID, INIT_BALANCE);
+        cd = new CD(QUICK_ID, INIT_BALANCE, APR);
     }
 
     @Test
