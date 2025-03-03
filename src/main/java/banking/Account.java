@@ -10,7 +10,7 @@ public abstract class Account {
         this.balance = startAmount;
     }
     
-    //overloaded costructor
+    //overloaded constructor
     public Account(int accountId, double startAmount, double apr) { //the name of the account
         this.accountId = accountId; //the current account holder's name
         this.balance = startAmount;

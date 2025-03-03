@@ -5,8 +5,8 @@ public class CD extends Account{
         super(accountId, 0, apr);
     }
 
-    public CD(int accId, double balance, double apr) {
-        super(accId, balance, apr);
+    public CD(int accId, double apr, double balance) {
+        super(accId, apr, balance);
     }
 
 }
