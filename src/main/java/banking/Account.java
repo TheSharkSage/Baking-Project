@@ -1,3 +1,5 @@
+package banking;
+
 public abstract class Account {
     private double balance;
     public final int accountId;

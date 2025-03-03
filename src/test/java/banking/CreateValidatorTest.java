@@ -1,3 +1,5 @@
+package banking;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,9 +29,9 @@ public class CreateValidatorTest {
 
     @Test
     void duplicate_account_id_is_invalid() {
-        //Account savings = new Savings(ID);
+        //banking.Account savings = new banking.Savings(ID);
         bank.addAccount(checking);
-        boolean actual = createValidator.validate("Create Savings 12345678");
+        boolean actual = createValidator.validate("Create banking.Savings 12345678");
         assertFalse(actual);
     }
 
@@ -47,7 +49,7 @@ public class CreateValidatorTest {
 
     @Test
     void account_id_out_of_bounds() {
-        boolean actual = createValidator.validate("Create Savings 123456787654321");
+        boolean actual = createValidator.validate("Create banking.Savings 123456787654321");
         assertFalse(actual);
     }
 
@@ -71,55 +73,55 @@ public class CreateValidatorTest {
 
     @Test
     void command_with_extra_spaces_is_invalid() {
-        boolean actual = createValidator.validate("Create  Savings  12345678");
+        boolean actual = createValidator.validate("Create  banking.Savings  12345678");
         assertFalse(actual);
     }
 
     @Test
     void cd_invalid_apr_with_letters_is_invalid() {
-        boolean actual = createValidator.validate("Create CD 12345678 ABC%");
+        boolean actual = createValidator.validate("Create banking.CD 12345678 ABC%");
         assertFalse(actual);
     }
 
     @Test
     void cd_negative_apr_is_invalid() {
-        boolean actual = createValidator.validate("Create CD 12345678 -5.0");
+        boolean actual = createValidator.validate("Create banking.CD 12345678 -5.0");
         assertFalse(actual);
     }
 
     @Test
     void cd_invalid_initial_amount_with_letters_is_invalid() {
-        boolean actual = createValidator.validate("Create CD 12345678 5.0 ABC");
+        boolean actual = createValidator.validate("Create banking.CD 12345678 5.0 ABC");
         assertFalse(actual);
     }
 
     @Test
     void cd_negative_initial_amount_is_invalid() {
-        boolean actual = createValidator.validate("Create CD 12345678 5.0 -1000");
+        boolean actual = createValidator.validate("Create banking.CD 12345678 5.0 -1000");
         assertFalse(actual);
     }
 
     @Test
     void cd_valid_parameters_is_valid() {
-        boolean actual = createValidator.validate("Create CD 12345678 5.0 1000");
+        boolean actual = createValidator.validate("Create banking.CD 12345678 5.0 1000");
         assertTrue(actual);
     }
 
     @Test
     void cd_missing_apr_is_invalid() {
-        boolean actual = createValidator.validate("Create CD 12345678");
+        boolean actual = createValidator.validate("Create banking.CD 12345678");
         assertFalse(actual);
     }
 
     @Test
     void cd_missing_initial_amount_is_invalid() {
-        boolean actual = createValidator.validate("Create CD 12345678 5.0");
+        boolean actual = createValidator.validate("Create banking.CD 12345678 5.0");
         assertFalse(actual);
     }
 
     @Test
     void cd_extra_parameters_is_invalid() {
-        boolean actual = createValidator.validate("Create CD 12345678 5.0 1000 extraParam");
+        boolean actual = createValidator.validate("Create banking.CD 12345678 5.0 1000 extraParam");
         assertFalse(actual);
     }
 
@@ -143,13 +145,13 @@ public class CreateValidatorTest {
 
     @Test
     void create_cd_without_money() {
-        boolean actual = createValidator.validate("Create CD 0");
+        boolean actual = createValidator.validate("Create banking.CD 0");
         assertFalse(actual);
     }
 
     @Test
     void create_account_with_too_many_numbers() {
-        boolean actual = createValidator.validate("Create Savings 1123458909876543321");
+        boolean actual = createValidator.validate("Create banking.Savings 1123458909876543321");
         assertFalse(actual);
     }
 

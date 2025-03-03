@@ -1,3 +1,5 @@
+package banking;
+
 public class CreateValidator extends CommandValidator {
 
     public CreateValidator(Bank bank) {
@@ -41,13 +43,13 @@ public class CreateValidator extends CommandValidator {
 
 
         if(bank.accountExistsByID(accId)) {
-            System.out.println("Account ID already exists");
+            System.out.println("banking.Account ID already exists");
             return false;
         }
 
         //check for cd due to unique nature
         if (accType.equals("cd") && !validateCDParameters(command)){
-            System.out.println("invalid CD parameters");
+            System.out.println("invalid banking.CD parameters");
             return false;
         }
 
@@ -62,9 +64,9 @@ public class CreateValidator extends CommandValidator {
     //validation helpers
 
     public boolean isValidAccountType(String accType) {
-        return accType.equalsIgnoreCase("Checking") ||
-                accType.equalsIgnoreCase("Savings") ||
-                accType.equalsIgnoreCase("CD");
+        return accType.equalsIgnoreCase("banking.Checking") ||
+                accType.equalsIgnoreCase("banking.Savings") ||
+                accType.equalsIgnoreCase("banking.CD");
     }
 
     

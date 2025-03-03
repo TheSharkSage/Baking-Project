@@ -1,3 +1,5 @@
+package banking;
+
 public class DepositValidator extends  CommandValidator{
     Bank bank = new Bank();
 
@@ -42,7 +44,7 @@ public class DepositValidator extends  CommandValidator{
         int accId = Integer.parseInt(accIdStr);
 
         if(bank.accountExistsByID(accId)) {
-            System.out.println("Account ID already exists");
+            System.out.println("banking.Account ID already exists");
             return false;
         }
 

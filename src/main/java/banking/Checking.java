@@ -1,3 +1,5 @@
+package banking;
+
 public class Checking extends Account {
     public Checking(int accId) {
         super( accId, 0);

@@ -1,3 +1,5 @@
+package banking;
+
 public class CD extends Account{
     public CD(int accountId, double apr) {
         super(accountId, 0, apr);

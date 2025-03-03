@@ -1,3 +1,5 @@
+package banking;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +19,7 @@ public class Bank {
 
     public void addAccount(Account account) {
         if (account == null) {
-            throw new IllegalArgumentException("Account cannot be null");
+            throw new IllegalArgumentException("banking.Account cannot be null");
         }
         accounts.put(account.getAccountId(), account);
     }
