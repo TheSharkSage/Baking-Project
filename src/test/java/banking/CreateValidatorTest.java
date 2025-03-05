@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CreateValidatorTest {
     private static final int ID = 12345678;
-    private CreateValidator createValidator;
+    private CommandValidator createValidator;
 
     private Bank bank;
     public Account checking;
@@ -49,7 +49,7 @@ public class CreateValidatorTest {
 
     @Test
     void account_id_out_of_bounds() {
-        boolean actual = createValidator.validate("Create banking.Savings 123456787654321");
+        boolean actual = createValidator.validate("Create Savings 123456787654321");
         assertFalse(actual);
     }
 
@@ -72,8 +72,14 @@ public class CreateValidatorTest {
     }
 
     @Test
+    void create_account_with_balance() {
+        boolean actual = createValidator.validate("Create checking 12345678 20.00 5.0");
+        assertTrue(actual);
+    }
+
+    @Test
     void command_with_extra_spaces_is_invalid() {
-        boolean actual = createValidator.validate("Create  banking.Savings  12345678");
+        boolean actual = createValidator.validate("Create  Savings  12345678");
         assertFalse(actual);
     }
 
@@ -151,7 +157,7 @@ public class CreateValidatorTest {
 
     @Test
     void create_account_with_too_many_numbers() {
-        boolean actual = createValidator.validate("Create banking.Savings 1123458909876543321");
+        boolean actual = createValidator.validate("Create Savings 1123458909876543321");
         assertFalse(actual);
     }
 

@@ -23,13 +23,13 @@ public class CreateValidator extends CommandValidator {
 
         //logic to allocate for apr commands
         if(command.length == 4) {
-            String apr = command[3];
+            String balance = command[3];
+            //todo implement validation logic for checking values
+        } else if(command.length == 5) {
+            String apr = command[4];
             if (!isValidApr(apr)) {
                 return false;
             }
-        } else if (command.length == 5) {
-            //check for a given amount for cd
-            String amount = command[4];
         }
 
         //check for the specific command type
@@ -45,7 +45,7 @@ public class CreateValidator extends CommandValidator {
         int accId = Integer.parseInt(accIdStr);
 
 
-        if(bank.accountExistsByID(accId)) {
+        if(super.bank.accountExistsByID(accId)) {
             System.out.println("Account ID already exists");
             return false;
         }

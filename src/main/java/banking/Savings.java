@@ -19,6 +19,6 @@ public class Savings extends Account{
             System.out.println("Amount exceeds 2500");
         }
 
-        setBalance(getBalance() + money);
+        super.setBalance(super.getBalance() + money);
     }
 }
