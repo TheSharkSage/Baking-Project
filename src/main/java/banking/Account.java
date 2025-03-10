@@ -1,7 +1,7 @@
 package banking;
 
 public abstract class Account {
-    private double balance;
+    public double balance;
     public final int accountId;
     public double APR;
 

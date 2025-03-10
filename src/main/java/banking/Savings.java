@@ -21,4 +21,21 @@ public class Savings extends Account{
 
         super.setBalance(super.getBalance() + money);
     }
+
+    @Override
+    public void withdraw(double money) {
+        //withdrawal limit
+        if(money > 1000) {
+            System.out.println("Cannot withdraw More than 1000 at a time");
+            return;
+        }
+
+        if (balance >= money) {
+            super.setBalance(super.getBalance() - money);
+        } else {
+            balance = 0;
+        }
+
+
+    }
 }

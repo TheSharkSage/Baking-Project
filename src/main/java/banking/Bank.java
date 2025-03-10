@@ -24,6 +24,13 @@ public class Bank {
         accounts.put(account.getAccountId(), account);
     }
 
+    public void removeAccount(Account account) {
+        if (account == null) {
+            throw new IllegalArgumentException("bank is already empty");
+        }
+        accounts.remove(account.getAccountId(), account);
+    }
+
     public void deposit(int accountId, double amount) {
         Account account = findAccount(accountId);
         if (amount <= 0) {
@@ -55,5 +62,7 @@ public class Bank {
         }
         return accounts.get(accountId) != null;//boolean to check the existence of account
     }
+
+
 }
 

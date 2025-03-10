@@ -9,5 +9,19 @@ public class CD extends Account{
         super(accId, apr, balance);
     }
 
+    @Override
+    public void withdraw(double money) {
+        //withdrawal limit
+        if(balance != money) {
+            System.out.println("Must withdraw whole amount");
+            return;
+        } else {
+            //withdraw full amount
+            super.setBalance(0);
+        }
+
+
+    }
+
 }
 

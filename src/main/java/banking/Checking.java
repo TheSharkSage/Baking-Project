@@ -1,7 +1,7 @@
 package banking;
 
 public class Checking extends Account {
-    private double balance;
+    //private double balance;
 
     //constructors
     public Checking(int accId) {
@@ -23,6 +23,7 @@ public class Checking extends Account {
         //withdrawal limit
         if(money > 400) {
             System.out.println("Cannot withdraw More than 400 at a time");
+            return;
         }
 
         if (balance >= money) {
