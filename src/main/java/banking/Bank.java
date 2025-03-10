@@ -47,6 +47,16 @@ public class Bank {
         account.setBalance(account.getBalance() - amount);
     }
 
+    public void transfer(int accountId, int accountId2, double amount) {
+        Account account1 = findAccount(accountId);
+        Account account2 = findAccount(accountId2);
+        //withdraw from acc1
+        account1.withdraw(amount);
+
+        //deposit to acc2
+        account2.deposit(amount);
+    }
+
     //Command method to ask for account
 
     public Account findAccount(int accountId) {
@@ -62,6 +72,7 @@ public class Bank {
         }
         return accounts.get(accountId) != null;//boolean to check the existence of account
     }
+
 
 
 }

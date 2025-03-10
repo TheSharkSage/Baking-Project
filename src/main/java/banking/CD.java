@@ -5,8 +5,8 @@ public class CD extends Account{
         super(accountId, 0, apr);
     }
 
-    public CD(int accId, double apr, double balance) {
-        super(accId, apr, balance);
+    public CD(int accId, double balance, double apr) {
+        super(accId, balance, apr);
     }
 
     @Override
@@ -17,7 +17,7 @@ public class CD extends Account{
             return;
         } else {
             //withdraw full amount
-            super.setBalance(0);
+            super.setBalance(super.getBalance() - money);
         }
     }
 

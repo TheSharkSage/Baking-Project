@@ -110,18 +110,18 @@ public class BankTest {
 
     @Test
     public void cannot_withdraw_more_than_1000_from_savings() {
-        singleDeposit(savings, MONEY, QUICK_ID_2);
-        bank.findAccount(QUICK_ID).withdraw(1000);
+        singleDeposit(savings, 2000, QUICK_ID_2);
+        bank.findAccount(QUICK_ID_2).withdraw(1100);
 
-        double actual = bank.findAccount(QUICK_ID).getBalance();
+        double actual = bank.findAccount(QUICK_ID_2).getBalance();
 
-        assertEquals(MONEY, actual);
+        assertEquals(2000, actual);
     }
 
     @Test
     public void cd_can_only_accept_full_withdrawal() {
+        cd = new CD(QUICK_ID_3, MONEY, 10);
         bank.addAccount(cd);
-        bank.findAccount(QUICK_ID_3).deposit(MONEY);
         bank.findAccount(QUICK_ID_3).withdraw(10);
 
         double actual = bank.findAccount(QUICK_ID_3).getBalance();
@@ -150,6 +150,40 @@ public class BankTest {
 
         assertTrue(bank.getAccounts().isEmpty());
     }
+
+    @Test
+    public void cannot_deposit_more_than_2500_in_savings() {
+        singleDeposit(savings, 2600, QUICK_ID_2);
+        double actual = bank.findAccount(QUICK_ID_2).getBalance();
+        assertEquals(0, actual);
+    }
+
+    @Test
+    public void transfer_between_accounts() {
+        bank.addAccount(checking);
+        bank.addAccount(savings);
+        singleDeposit(checking, 100, QUICK_ID);
+        bank.transfer(QUICK_ID, QUICK_ID_2, 100);
+
+        double actual = bank.findAccount(QUICK_ID_2).getBalance();
+        assertEquals(100, actual);
+
+    }
+
+    @Test
+    public void transfer_between_same_account_types() {
+        Account checking2 = new Checking(12341234, 100);
+        bank.addAccount(checking);
+        bank.addAccount(checking2);
+
+        bank.transfer(12341234, QUICK_ID, 50);
+        double actual = bank.findAccount(QUICK_ID).getBalance();
+        assertEquals(50, actual);
+    }
+
+
+
+
     //helper methods
     private void singleDeposit(Account account, double money, int id) {
         bank.addAccount(account);
