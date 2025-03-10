@@ -22,4 +22,12 @@ public class CDTest{
         assertEquals(INIT_BALANCE,actual);
 
     }
+
+    @Test
+    public void cannot_receive_deposit() {
+        cd.deposit(10);
+        double actual = cd.getBalance();
+        assertEquals(170.56, actual);
+    }
+
 }

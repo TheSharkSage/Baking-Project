@@ -130,6 +130,20 @@ public class BankTest {
     }
 
     @Test
+    public void cannot_deposit_more_than_1000_in_checking() {
+        singleDeposit(checking, 1001, QUICK_ID);
+        double actual = bank.findAccount(QUICK_ID).getBalance();
+        assertEquals(0,actual );
+    }
+
+    @Test
+    public void cd_cannot_receive_deposit() {
+        singleDeposit(cd, 100, QUICK_ID_3);
+        double actual = bank.findAccount(QUICK_ID_3).getBalance();
+        assertEquals(0, actual);
+    }
+
+    @Test
     public void close_an_account() {
         bank.addAccount(checking);
         bank.removeAccount(checking);

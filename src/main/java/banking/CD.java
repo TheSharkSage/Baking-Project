@@ -19,8 +19,12 @@ public class CD extends Account{
             //withdraw full amount
             super.setBalance(0);
         }
+    }
 
-
+    @Override
+    public void deposit(double money) {
+        System.out.println("Cannot deposit to this account");
+        return;
     }
 
 }

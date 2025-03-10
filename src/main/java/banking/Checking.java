@@ -31,7 +31,14 @@ public class Checking extends Account {
         } else {
             balance = 0;
         }
+    }
 
-
+    @Override
+    public void deposit(double money) {
+        if (money > 1000) {
+            System.out.println("Deposit amount exceeds 1000");
+            return;
+        }
+        super.setBalance(super.getBalance() + money);
     }
 }
