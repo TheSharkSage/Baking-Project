@@ -41,15 +41,18 @@ public abstract class Account {
     }
 
 
-    public void deposit(double money) {
+    public boolean deposit(double money) {
         setBalance(getBalance() + money);
+        return true;
     }
 
-    public void withdraw(double money) {
+    public boolean withdraw(double money) {
         if (balance >= money) {
             setBalance(getBalance() - money);
+            return true;
         } else {
             balance = 0;
+            return true;
         }
     }
 

@@ -2,6 +2,8 @@ package banking;
 
 public class CommandValidator {
     protected Bank bank;
+    private CreateValidator createValidator;
+    private DepositValidator depositValidator;
 
     //will defer all inputs to the childrne based on the first command
     //recommended to use a switch case
@@ -9,6 +11,8 @@ public class CommandValidator {
     //constructor
     public CommandValidator(Bank bank) {
         this.bank = bank;
+        this.createValidator = new CreateValidator(bank);
+        this.depositValidator = new DepositValidator(bank);
     }
 
     //template for validation
@@ -30,7 +34,7 @@ public class CommandValidator {
     // }
 
 
-   public boolean isValidAmount(String amount) {
+    protected boolean isValidAmount(String amount) {
         //convert string amount to a double
         try {
             double value = Double.parseDouble(amount);//parse the double to convert every value
@@ -63,15 +67,11 @@ public class CommandValidator {
         //check the first field and delegate to child class
         switch(commandType) {
             case "create":
-                //instantiate a child to delegate command
-                CreateValidator create= new CreateValidator(bank);
-                return create.validateSpecific(parts);
+                return createValidator.validateSpecific(parts);
             case "deposit":
-                DepositValidator deposit = new DepositValidator(bank);
-                return deposit.validateSpecific(parts);
+                return depositValidator.validateSpecific(parts);
             default:
-                //output when command syntax is valid but  type doesn't exist
-                //throw new IllegalArgumentException("Invalid Command Type");
+                //output when command syntax is valid but type doesn't exist
                 return false;
         }
     }

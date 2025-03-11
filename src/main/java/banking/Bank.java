@@ -19,58 +19,94 @@ public class Bank {
 
     public void addAccount(Account account) {
         if (account == null) {
-            throw new IllegalArgumentException("banking.Account cannot be null");
+            throw new IllegalArgumentException("Account cannot be null");
         }
         accounts.put(account.getAccountId(), account);
     }
 
     public void removeAccount(Account account) {
         if (account == null) {
-            throw new IllegalArgumentException("bank is already empty");
+            throw new IllegalArgumentException("Account cannot be null");
         }
         accounts.remove(account.getAccountId(), account);
     }
 
-    public void deposit(int accountId, double amount) {
-        Account account = findAccount(accountId);
+    // Returns true if the deposit was successful
+    // Returns false if the account does not exist
+    public boolean deposit(int accountId, double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("Deposit amount must be greater than 0");
         }
-        account.setBalance(account.getBalance() + amount);
-    }
 
-    public void withdraw(int accountId, double amount) {
         Account account = findAccount(accountId);
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Deposit amount must be greater than 0");
+        if (account == null) {
+            System.out.println("Account does not exist");
+            return false;
         }
-        account.setBalance(account.getBalance() - amount);
+
+        account.deposit(amount);
+
+        return true;
     }
 
-    public void transfer(int accountId, int accountId2, double amount) {
-        Account account1 = findAccount(accountId);
-        Account account2 = findAccount(accountId2);
-        //withdraw from acc1
-        account1.withdraw(amount);
+    // Returns true if the withdrawl was successful
+    // Returns false if the account does not exist or insufficient funds
+    public boolean withdraw(int accountId, double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Withdrawl amount must be greater than 0");
+        }
 
-        //deposit to acc2
-        account2.deposit(amount);
+        Account account = findAccount(accountId);
+        if (account == null) {
+            System.out.println("Account does not exist");
+            return false;
+        }
+
+        if (amount >= account.getBalance()){
+            System.out.println("Insufficient funds");
+            return false;
+        }
+        
+        account.withdraw(amount);
+        return true;
+    }
+
+    public boolean transfer(int fromAccountId, int toAccountId, double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Withdrawl amount must be greater than 0");
+        }
+        
+        Account toAccount = findAccount(toAccountId);
+        Account fromAccount = findAccount(fromAccountId);
+
+        // Check if the accounts exist
+        if(toAccount == null || fromAccount == null){
+            return false;
+        }
+
+        // Check if the fromAccount has enough money
+        if (amount >= fromAccount.getBalance()){
+            System.out.println("Insufficient funds");
+            return false;
+        }
+
+        // perform the transfer
+        //if there is an error with the withdrawal or deposit, the transfer won't execute
+        return fromAccount.withdraw(amount) && toAccount.deposit(amount);
+
+        //return true;
     }
 
     //Command method to ask for account
-
     public Account findAccount(int accountId) {
+        // check if map has address to accountId
         return accounts.get(accountId);
     }
 
     //Query method to check for existence
-
     public boolean accountExistsByID(int accountId) {
-        //check if account has already been made
-        if (!accounts.containsKey(accountId)){
-            return false;
-        }
-        return accounts.get(accountId) != null;//boolean to check the existence of account
+        // check if map has entry with key accountId
+        return accounts.containsKey(accountId);
     }
 
 

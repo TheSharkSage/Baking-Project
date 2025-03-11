@@ -10,21 +10,22 @@ public class CD extends Account{
     }
 
     @Override
-    public void withdraw(double money) {
+    public boolean withdraw(double money) {
         //withdrawal limit
         if(balance != money) {
             System.out.println("Must withdraw whole amount");
-            return;
+            return false;
         } else {
             //withdraw full amount
             super.setBalance(super.getBalance() - money);
         }
+        return true;
     }
 
     @Override
-    public void deposit(double money) {
+    public boolean deposit(double money) {
         System.out.println("Cannot deposit to this account");
-        return;
+        return false;
     }
 
 }

@@ -19,11 +19,11 @@ public class Checking extends Account {
 
 
     @Override
-    public void withdraw(double money) {
+    public boolean withdraw(double money) {
         //withdrawal limit
         if(money > 400) {
             System.out.println("Cannot withdraw More than 400 at a time");
-            return;
+            return false;
         }
 
         if (balance >= money) {
@@ -31,14 +31,17 @@ public class Checking extends Account {
         } else {
             balance = 0;
         }
+        return true;
     }
 
     @Override
-    public void deposit(double money) {
+    public boolean deposit(double money) {
         if (money > 1000) {
             System.out.println("Deposit amount exceeds 1000");
-            return;
+            return false;
         }
         super.setBalance(super.getBalance() + money);
+        return true;
     }
+
 }

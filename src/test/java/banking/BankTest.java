@@ -4,18 +4,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 //import javax.print.attribute.standard.MediaSize;
+import static org.junit.jupiter.api.Assertions.*;
 
-
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BankTest {
 
-    public static final int QUICK_ID = 12345678;
-    public static final int QUICK_ID_2 = 87654321;
+    public static final int CHECKING_ID = 12345678;
+    public static final int SAVINGS_ID = 87654321;
     public static final int MONEY = 20;
-    private static final int QUICK_ID_3 = 12341234;
+    private static final int CD_ID = 12341234;
     Bank bank;
     public Account checking;
     public Account savings;
@@ -24,9 +21,9 @@ public class BankTest {
     @BeforeEach
     void setUp() {
         bank = new Bank();//make a new bank with each test case
-        checking = new Checking(QUICK_ID);
-        savings = new Savings(QUICK_ID_2);
-        cd = new CD(QUICK_ID_3, 10);
+        checking = new Checking(CHECKING_ID);
+        savings = new Savings(SAVINGS_ID);
+        cd = new CD(CD_ID, 10);
     }
 
 
@@ -38,25 +35,25 @@ public class BankTest {
     @Test
     public void add_account_to_bank() {
         bank.addAccount(checking);
-        assertEquals(checking, bank.findAccount(QUICK_ID));
+        assertTrue(bank.accountExistsByID(CHECKING_ID));
+        assertEquals(checking, bank.findAccount(CHECKING_ID));
     }
 
     @Test
     public void add_two_accounts_to_bank() {
         bank.addAccount(checking);
         bank.addAccount(savings);
-        Account actual = bank.findAccount(QUICK_ID);
-        Account actual2 = bank.findAccount(QUICK_ID_2);
-        assertEquals(QUICK_ID , actual.getAccountId());
-        assertEquals(QUICK_ID_2 , actual2.getAccountId());
+
+        assertEquals(checking, bank.findAccount(CHECKING_ID));
+        assertEquals(savings, bank.findAccount(SAVINGS_ID));
 
     }
 
     @Test
     public void retrieve_one_account_from_bank() {
         bank.addAccount(checking);
-        Account actual = bank.findAccount(QUICK_ID);
-        assertEquals(QUICK_ID, actual.getAccountId());//bank class->getAccounts method->get ID from hash map-> retrieve name from checking class method
+        Account actual = bank.findAccount(CHECKING_ID);
+        assertEquals(CHECKING_ID, actual.getAccountId());//bank class->getAccounts method->get ID from hash map-> retrieve name from checking class method
     }
 
     @Test
@@ -65,81 +62,81 @@ public class BankTest {
         bank.addAccount(checking);
         bank.addAccount(savings);
 
-        bank.findAccount(QUICK_ID).deposit(100);
+        bank.findAccount(CHECKING_ID).deposit(100);
 
-        assertEquals(100, bank.findAccount(QUICK_ID).getBalance());
-        assertEquals(0, bank.findAccount(QUICK_ID_2).getBalance());
+        assertEquals(100, bank.findAccount(CHECKING_ID).getBalance());
+        assertEquals(0, bank.findAccount(SAVINGS_ID).getBalance());
     }
 
     @Test
     public void deposit_multiple_times() {
         bank.addAccount(checking);
-        bank.findAccount(QUICK_ID).deposit(100);
-        bank.findAccount(QUICK_ID).deposit(140);
+        bank.findAccount(CHECKING_ID).deposit(100);
+        bank.findAccount(CHECKING_ID).deposit(140);
 
-        assertEquals(240, bank.findAccount(QUICK_ID).getBalance());
+        assertEquals(240, bank.findAccount(CHECKING_ID).getBalance());
     }
 
     @Test
     public void withdrawal_to_specific_account_by_ID() {
         //if we want to ensure that we are depositing to the correct account, we'd compare the id's of our expected vs actual
-        singleDeposit(checking,100, QUICK_ID);
-        bank.findAccount(QUICK_ID).withdraw(90);
-        assertEquals(10,  bank.findAccount(QUICK_ID).getBalance());
+        singleDeposit(checking,100, CHECKING_ID);
+        bank.findAccount(CHECKING_ID).withdraw(90);
+        assertEquals(10,  bank.findAccount(CHECKING_ID).getBalance());
     }
 
     @Test
     public void withdraw_through_bank_multiple_times() {
-        singleDeposit(checking, MONEY, QUICK_ID);
-        bank.findAccount(QUICK_ID).withdraw(13.8);
-        bank.findAccount(QUICK_ID).withdraw(9.3);//withdrawing past the amount to ensure the withdrawal still operates properly
-        double actual = bank.findAccount(QUICK_ID).getBalance();
+        singleDeposit(checking, MONEY, CHECKING_ID);
+        bank.findAccount(CHECKING_ID).withdraw(13.8);
+        bank.findAccount(CHECKING_ID).withdraw(9.3);//withdrawing past the amount to ensure the withdrawal still operates properly
+        double actual = bank.findAccount(CHECKING_ID).getBalance();
 
         assertEquals(0,actual);
     }
 
     @Test
     public void cannot_withdraw_more_than_400_from_checking() {
-        singleDeposit(checking, MONEY, QUICK_ID);
-        bank.findAccount(QUICK_ID).withdraw(500);
+        singleDeposit(checking, MONEY, CHECKING_ID);
+        bank.findAccount(CHECKING_ID).withdraw(500);
 
-        double actual = bank.findAccount(QUICK_ID).getBalance();
+        double actual = bank.findAccount(CHECKING_ID).getBalance();
 
         assertEquals(MONEY, actual);
     }
 
     @Test
     public void cannot_withdraw_more_than_1000_from_savings() {
-        singleDeposit(savings, 2000, QUICK_ID_2);
-        bank.findAccount(QUICK_ID_2).withdraw(1100);
+        singleDeposit(savings, 2000, SAVINGS_ID);
+        bank.findAccount(SAVINGS_ID).withdraw(1100);
 
-        double actual = bank.findAccount(QUICK_ID_2).getBalance();
+        double actual = bank.findAccount(SAVINGS_ID).getBalance();
 
         assertEquals(2000, actual);
     }
 
     @Test
     public void cd_can_only_accept_full_withdrawal() {
-        cd = new CD(QUICK_ID_3, MONEY, 10);
+        cd = new CD(CD_ID, MONEY, 10);
         bank.addAccount(cd);
-        bank.findAccount(QUICK_ID_3).withdraw(10);
+        bank.findAccount(CD_ID).withdraw(10);
 
-        double actual = bank.findAccount(QUICK_ID_3).getBalance();
+        double actual = bank.findAccount(CD_ID).getBalance();
 
         assertEquals(MONEY, actual);
     }
 
     @Test
     public void cannot_deposit_more_than_1000_in_checking() {
-        singleDeposit(checking, 1001, QUICK_ID);
-        double actual = bank.findAccount(QUICK_ID).getBalance();
+        singleDeposit(checking, 1001, CHECKING_ID);
+        double actual = bank.findAccount(CHECKING_ID).getBalance();
         assertEquals(0,actual );
     }
 
     @Test
     public void cd_cannot_receive_deposit() {
-        singleDeposit(cd, 100, QUICK_ID_3);
-        double actual = bank.findAccount(QUICK_ID_3).getBalance();
+        singleDeposit(cd, 100, CD_ID);
+        double actual = bank.findAccount(CD_ID).getBalance();
         assertEquals(0, actual);
     }
 
@@ -153,8 +150,8 @@ public class BankTest {
 
     @Test
     public void cannot_deposit_more_than_2500_in_savings() {
-        singleDeposit(savings, 2600, QUICK_ID_2);
-        double actual = bank.findAccount(QUICK_ID_2).getBalance();
+        singleDeposit(savings, 2600, SAVINGS_ID);
+        double actual = bank.findAccount(SAVINGS_ID).getBalance();
         assertEquals(0, actual);
     }
 
@@ -162,10 +159,10 @@ public class BankTest {
     public void transfer_between_accounts() {
         bank.addAccount(checking);
         bank.addAccount(savings);
-        singleDeposit(checking, 100, QUICK_ID);
-        bank.transfer(QUICK_ID, QUICK_ID_2, 100);
+        singleDeposit(checking, 100, CHECKING_ID);
+        bank.transfer(CHECKING_ID, SAVINGS_ID, 100);
 
-        double actual = bank.findAccount(QUICK_ID_2).getBalance();
+        double actual = checking.getBalance();
         assertEquals(100, actual);
 
     }
@@ -176,11 +173,42 @@ public class BankTest {
         bank.addAccount(checking);
         bank.addAccount(checking2);
 
-        bank.transfer(12341234, QUICK_ID, 50);
-        double actual = bank.findAccount(QUICK_ID).getBalance();
+        bank.transfer(12341234, CHECKING_ID, 50);
+        double actual = bank.findAccount(CHECKING_ID).getBalance();
         assertEquals(50, actual);
     }
 
+    @Test
+    public void transfer_exceeds_account_balance() {
+        Account checking2 = new Checking(12341234, 100);
+        bank.addAccount(checking);
+        bank.addAccount(checking2);
+
+        boolean actual = bank.transfer(12341234, CHECKING_ID, 150);
+        assertFalse(actual);
+    }
+
+    @Test
+    public void cd_refuses_transfer() {
+        Account cd = new CD(CD_ID, MONEY, 10);
+        bank.addAccount(cd);
+        bank.addAccount(savings);
+        singleDeposit(savings, MONEY, SAVINGS_ID);
+
+        boolean actual = bank.transfer(SAVINGS_ID, CD_ID, 10);
+        assertFalse(actual);
+    }
+
+    @Test
+    public void cd_transfer_to_account_refused() {
+        Account cd = new CD(CD_ID, MONEY, 10);
+        bank.addAccount(cd);
+        bank.addAccount(savings);
+        singleDeposit(savings, MONEY, SAVINGS_ID);
+
+        boolean actual = bank.transfer(CD_ID, SAVINGS_ID, 10);
+        assertFalse(actual);
+    }
 
 
 
