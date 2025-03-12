@@ -23,7 +23,7 @@ public class BankTest {
     void setUp() {
         bank = new Bank();//make a new bank with each test case
         checking = new Checking(CHECKING_ID, APR);
-        savings = new Savings(SAVINGS_ID);
+        savings = new Savings(SAVINGS_ID, APR);
         cd = new CD(CD_ID, 10, 1000);
     }
 

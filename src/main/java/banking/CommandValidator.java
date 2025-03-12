@@ -34,7 +34,7 @@ public class CommandValidator {
 
 
     public int getMinimumPartsRequired() {
-        return 3;
+        return 2;
     }
 
 

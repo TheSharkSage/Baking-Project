@@ -1,9 +1,6 @@
 package banking;
 
 public class Savings extends Account{
-    public Savings(int accId) {
-        super(accId, 0);
-    }
 
     public Savings(int accId, double apr) {
         super( accId, apr);

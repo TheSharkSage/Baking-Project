@@ -34,8 +34,11 @@ public class CommandProcessor {
 
         }
 
-    private boolean processDepositCommand(String[] parts) {
-        //[deposit, accoutnId, amount]
+    private void processWithdrawCommand(String[] parts) {
+    }
+
+    private void processDepositCommand(String[] parts) {
+        //[deposit, accountId, amount]
         int id = Integer.parseInt(parts[1]);
         double amount = Double.parseDouble(parts[2]);
 
@@ -43,10 +46,10 @@ public class CommandProcessor {
 
         if(account == null) {
             System.out.println("banking.Account not found");
-            return false;
+            //return false;
         }
         
-        return account.deposit(amount);
+        bank.findAccount(id).deposit(amount);
     }
 
     private void processCreateCommand(String[] parts) {
