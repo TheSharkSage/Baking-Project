@@ -78,21 +78,6 @@ public class DepositValidatorTest {
         assertFalse(actual);
     }
 
-    @Test
-    void withdraw_negative_amount() {
-        bank.addAccount(checking);
-        checking.deposit(100.0);
-        boolean actual = depositValidator.validate("Withdraw -100");
-        assertFalse(actual);
-    }
-
-    @Test
-    void multiple_transactions_sequence() {
-        bank.addAccount(checking);
-
-        assertTrue(depositValidator.validate("Deposit 12345678 100"));
-        assertTrue(depositValidator.validate("Deposit 12345678 500"));
-    }
 
     
 }

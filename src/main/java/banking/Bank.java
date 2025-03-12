@@ -89,10 +89,12 @@ public class Bank {
             return false;
         }
 
-        // Check if the fromAccount has enough money
+        // Transfer the as much money from the account as possible if the amount exceeds balance
         if (amount > fromAccount.getBalance()){
-            System.out.println("Insufficient funds");
-            return false;
+            System.out.println("Insufficient funds, transferred max possible value");
+            //return false;
+            //deposit the balance of the account to the new account and then withdraw from the whole account
+            return toAccount.deposit(fromAccount.getBalance()) && fromAccount.withdraw(fromAccount.getBalance());
         }
 
         // perform the transfer

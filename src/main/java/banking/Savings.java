@@ -35,7 +35,9 @@ public class Savings extends Account{
         if (balance >= money) {
             super.setBalance(super.getBalance() - money);
         } else {
+            //if the amount exceeds the balance, then take as much money from the account as possible
             balance = 0;
+
         }
         return true;
 

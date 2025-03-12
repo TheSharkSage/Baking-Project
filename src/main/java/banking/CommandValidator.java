@@ -15,6 +15,10 @@ public class CommandValidator {
                 return new CreateValidator(bank);
             case "deposit":
                 return new DepositValidator(bank);
+            case "transfer":
+                return new TransferValidator(bank);
+            case "withdraw":
+                return new WithdrawValidator(bank);
             default:
                 //output when command syntax is valid but type doesn't exist
                 return new CommandValidator(bank);

@@ -176,13 +176,13 @@ public class BankTest {
     }
 
     @Test
-    public void transfer_exceeds_account_balance() {
+    public void transfer_exceeds_account_balance_is_valid() {
         Account checking2 = new Checking(12341234, 100);
         bank.addAccount(checking);
         bank.addAccount(checking2);
 
         boolean actual = bank.transfer(12341234, CHECKING_ID, 150);
-        assertFalse(actual);
+        assertTrue(actual);
     }
 
     @Test
@@ -206,6 +206,7 @@ public class BankTest {
         boolean actual = bank.transfer(CD_ID, SAVINGS_ID, 10);
         assertFalse(actual);
     }
+
 
 
 
