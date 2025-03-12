@@ -19,6 +19,8 @@ public class CommandValidator {
                 return new TransferValidator(bank);
             case "withdraw":
                 return new WithdrawValidator(bank);
+            case "pass":
+                return new PassTimeValidator(bank);
             default:
                 //output when command syntax is valid but type doesn't exist
                 return new CommandValidator(bank);
@@ -32,7 +34,7 @@ public class CommandValidator {
 
 
     public int getMinimumPartsRequired() {
-        return 4;
+        return 3;
     }
 
 

@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DepositValidatorTest {
     public static final int ID = 87654321;
+    public static final double APR = 10.00;
     public CommandValidator depositValidator;
 
     public Bank bank;
@@ -16,7 +17,7 @@ public class DepositValidatorTest {
     @BeforeEach
     void setUp() {
         bank = new Bank();
-        checking = new Checking(ID);
+        checking = new Checking(ID, APR);
         depositValidator = new CommandValidator(bank);
     }
 

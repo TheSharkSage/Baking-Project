@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TransferValidatorTest {
     public static final int CHECKING_ID = 12345678;
     public static final int SAVINGS_ID = 87654321;
+    public static final double APR = 10.00;
     private CommandValidator transferValidator;
 
     public Bank bank;
@@ -18,7 +19,7 @@ public class TransferValidatorTest {
     @BeforeEach
     void setUp() {
         bank = new Bank();
-        checking = new Checking(CHECKING_ID);
+        checking = new Checking(CHECKING_ID, APR);
         savings = new Savings(SAVINGS_ID);
         transferValidator = new CommandValidator(bank);
     }

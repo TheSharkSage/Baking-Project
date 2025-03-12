@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class WithdrawValidatorTest {
     public static final int CHECKING_ID = 12345678;
+    public static final double APR = 10.00;
     private WithdrawValidator withdrawValidator;
     private Bank bank;
     public Account checking;
@@ -15,7 +16,7 @@ public class WithdrawValidatorTest {
     @BeforeEach
     void setUp() {
         bank = new Bank();
-        checking = new Checking(CHECKING_ID);
+        checking = new Checking(CHECKING_ID, APR);
         withdrawValidator = new WithdrawValidator(bank);
     }
 

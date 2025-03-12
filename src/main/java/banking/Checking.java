@@ -1,12 +1,10 @@
 package banking;
 
 public class Checking extends Account {
-    // checking starts with 0 dollars
-    private double balance = 0;
 
     //constructors
     public Checking(int accId, double apr) {
-        super( accId, 0, apr);
+        super( accId, 0);
     }
 
 
@@ -22,8 +20,10 @@ public class Checking extends Account {
 
         if (balance >= money) {
             super.setBalance(super.getBalance() - money);
+
+            return true;
         } else {
-            balance = 0;
+            super.setBalance(0);
         }
         return true;
     }

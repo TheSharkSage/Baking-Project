@@ -1,5 +1,6 @@
 package banking;
 
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 public class CreateValidator extends CommandValidator {
@@ -25,8 +26,23 @@ public class CreateValidator extends CommandValidator {
             return false;
         }
 
+        if (command.length > 3) {
+            System.out.println("Attempting to parse APR from: " + command[3]);
+            // Parsing logic
+        }
         //todo checking commands have 4 parameters [create checking, accId, apr]
         // CD commands have 5 parameters [create, cd, accId, apr, balance]
+
+        // Before attempting to parse, check if the element exists
+        if (command[3] != null) {
+            try {
+                double apr = Double.parseDouble(command[3]);
+                // Process APR
+            } catch (NumberFormatException e) {
+                // Handle invalid number format
+                return false;
+            }
+        }
 
         if(!isValidAccountType(accType)) {
             System.out.println("Invalid account type");
@@ -70,7 +86,7 @@ public class CreateValidator extends CommandValidator {
         }
 
         try {
-            command[3] = new DecimalFormat("#.##").format(command[3]);
+            //command[3] = new DecimalFormat("#.##").format(command[3]);
             //convert the apr from string to double
             double apr = Double.parseDouble(command[3]);
 
@@ -79,7 +95,10 @@ public class CreateValidator extends CommandValidator {
             }
             //convert amount into string
             double balance = Double.parseDouble(command[4]);
-            return amount > 0;
+            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+            decimalFormat.setRoundingMode(RoundingMode.FLOOR);
+
+            return balance > 0;
         } catch (NumberFormatException e) {
             return false;
         }
@@ -87,7 +106,10 @@ public class CreateValidator extends CommandValidator {
 
     public boolean isValidApr(String APR) {
     //parse the string into double and check if 0
+
+
         try {
+
             double apr = Double.parseDouble(APR);
             if (apr < 0) {
                 return false;

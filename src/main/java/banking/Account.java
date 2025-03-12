@@ -6,6 +6,7 @@ public abstract class Account {
     protected double APR;
     protected int creationDate;
 
+
     // constructor for saving and checking
     public Account(int accountId, double apr) { //the name of the account
         this.accountId = accountId; //the current account holder's name
@@ -59,5 +60,6 @@ public abstract class Account {
             return true;
         }
     }
+
 
 }

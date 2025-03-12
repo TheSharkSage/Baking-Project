@@ -5,12 +5,9 @@ public class Savings extends Account{
         super(accId, 0);
     }
 
-    public Savings(int accId, double balance) {
-        super( accId, balance );
-    }
+    public Savings(int accId, double apr) {
+        super( accId, apr);
 
-    public Savings(int accId, double balance, double apr) {
-        super( accId, balance, apr);
     }
 
     @Override
