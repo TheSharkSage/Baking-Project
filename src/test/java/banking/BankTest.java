@@ -98,46 +98,43 @@ public class BankTest {
     @Test
     public void cannot_withdraw_more_than_400_from_checking() {
         singleDeposit(checking, MONEY, CHECKING_ID);
-        bank.findAccount(CHECKING_ID).withdraw(500);
 
-        double actual = bank.findAccount(CHECKING_ID).getBalance();
 
-        assertEquals(MONEY, actual);
+        boolean actual = checking.withdraw(500);
+
+        assertFalse(actual);
     }
 
     @Test
     public void cannot_withdraw_more_than_1000_from_savings() {
         singleDeposit(savings, 2000, SAVINGS_ID);
-        bank.findAccount(SAVINGS_ID).withdraw(1100);
 
-        double actual = bank.findAccount(SAVINGS_ID).getBalance();
-
-        assertEquals(2000, actual);
+        boolean actual = savings.withdraw(1100);
+        assertFalse(actual);
     }
 
     @Test
     public void cd_can_only_accept_full_withdrawal() {
         cd = new CD(CD_ID, MONEY, 10);
         bank.addAccount(cd);
-        bank.findAccount(CD_ID).withdraw(10);
 
-        double actual = bank.findAccount(CD_ID).getBalance();
+        boolean actual = cd.withdraw(10);
 
-        assertEquals(MONEY, actual);
+        assertFalse(actual);
+        assertTrue(cd.withdraw(MONEY));
     }
 
     @Test
     public void cannot_deposit_more_than_1000_in_checking() {
-        singleDeposit(checking, 1001, CHECKING_ID);
-        double actual = bank.findAccount(CHECKING_ID).getBalance();
-        assertEquals(0,actual );
+        boolean actual = checking.deposit(1001);
+        assertFalse(actual);
     }
 
     @Test
     public void cd_cannot_receive_deposit() {
         singleDeposit(cd, 100, CD_ID);
-        double actual = bank.findAccount(CD_ID).getBalance();
-        assertEquals(0, actual);
+        boolean actual = cd.deposit(100);
+        assertFalse(actual);
     }
 
     @Test
@@ -150,20 +147,20 @@ public class BankTest {
 
     @Test
     public void cannot_deposit_more_than_2500_in_savings() {
-        singleDeposit(savings, 2600, SAVINGS_ID);
-        double actual = bank.findAccount(SAVINGS_ID).getBalance();
-        assertEquals(0, actual);
+        boolean actual = savings.deposit(2600);
+        assertFalse(actual);
     }
 
     @Test
     public void transfer_between_accounts() {
         bank.addAccount(checking);
         bank.addAccount(savings);
-        singleDeposit(checking, 100, CHECKING_ID);
-        bank.transfer(CHECKING_ID, SAVINGS_ID, 100);
+        //singleDeposit(checking, 100, CHECKING_ID);
+        checking.deposit(100);
 
-        double actual = checking.getBalance();
-        assertEquals(100, actual);
+        boolean actual = bank.transfer(CHECKING_ID, SAVINGS_ID, 100);
+        assertTrue(actual);
+        assertEquals(100, savings.getBalance());
 
     }
 

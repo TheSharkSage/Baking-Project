@@ -1,9 +1,10 @@
 package banking;
 
 public abstract class Account {
-    public double balance;
-    public final int accountId;
-    public double APR;
+    protected double balance;
+    protected final int accountId;
+    protected double APR;
+    protected int creationDate;
 
     public Account(int accountId, double startAmount) { //the name of the account
         this.accountId = accountId; //the current account holder's name

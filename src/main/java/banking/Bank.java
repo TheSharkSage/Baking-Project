@@ -2,12 +2,17 @@ package banking;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+
 
 public class Bank {
-    public Map<Integer, Account> accounts;
+    private Map<Integer, Account> accounts;
+    private int currentMonth;
 
     public Bank() {
         accounts = new HashMap<>();
+        currentMonth = 0;
     }
 
     public Map<Integer, Account> getAccounts() {//a list of all the accounts stored, with a key to each account
@@ -85,7 +90,7 @@ public class Bank {
         }
 
         // Check if the fromAccount has enough money
-        if (amount >= fromAccount.getBalance()){
+        if (amount > fromAccount.getBalance()){
             System.out.println("Insufficient funds");
             return false;
         }
@@ -110,6 +115,44 @@ public class Bank {
     }
 
 
+    // Time passing functionality
+    public void passTime(int numMonths) {
+        for (int i=0; i < numMonths; i++) {
+            // advance months with each iteration
+            currentMonth++;
+            closeEmptyAccounts();
+            deductFromLowAccounts();
+            accrueAPR();
+        }
+    }
 
+    private void closeEmptyAccounts() {
+        List<Account> accountsToRemove = new ArrayList<>();
+        
+        // mark accounts with 0 balance for removal
+        for(Account a : accounts.values()) {
+            if (a.getBalance() == 0){
+                accountsToRemove.add(a);
+            }
+        }
+
+        // remove accounts with 0 balance
+        for (Account a : accountsToRemove) {
+            removeAccount(a);
+        }
+    }
+
+    private void deductFromLowAccounts() {       
+        for (Account a : accounts.values()) {
+            if(a.getBalance() < 100) {
+                a.withdraw(25);
+            }
+        }
+    }
+
+    private void accrueAPR() {
+        // divide apr by 12
+        //todo APR compounded monthly formula
+    }
 }
 

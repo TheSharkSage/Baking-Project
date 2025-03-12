@@ -26,6 +26,7 @@ public class CreateValidator extends CommandValidator {
             String balance = command[3];
             //todo implement validation logic for checking values
         } else if(command.length == 5) {
+            String balance = command[3];
             String apr = command[4];
             if (!isValidApr(apr)) {
                 return false;

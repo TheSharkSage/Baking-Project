@@ -25,7 +25,7 @@ public class DepositValidator extends  CommandValidator{
         String amount = command[2];
 
 
-        if(bank.accounts.isEmpty()) {
+        if(bank.getAccounts().isEmpty()) {
             return false;
         }
 

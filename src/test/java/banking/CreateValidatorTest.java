@@ -109,7 +109,7 @@ public class CreateValidatorTest {
 
     @Test
     void cd_valid_parameters_is_valid() {
-        boolean actual = createValidator.validate("Create CD 12345678 5.0 1000");
+        boolean actual = createValidator.validate("Create CD 12345678 1000 5.0");
         assertTrue(actual);
     }
 
@@ -127,19 +127,19 @@ public class CreateValidatorTest {
 
     @Test
     void cd_extra_parameters_is_invalid() {
-        boolean actual = createValidator.validate("Create CD 12345678 5.0 1000 extraParam");
+        boolean actual = createValidator.validate("Create CD 12345678 1000 5.0 extraParam");
         assertFalse(actual);
     }
 
     @Test
     void cd_mixed_case_with_valid_parameters_is_valid() {
-        boolean actual = createValidator.validate("CrEaTe Cd 12345678 5.0 1000");
+        boolean actual = createValidator.validate("CrEaTe Cd 12345678 1000 5.0 ");
         assertTrue(actual);
     }
 
     @Test
     void cd_all_lowercase_with_valid_parameters_is_valid() {
-        boolean actual = createValidator.validate("create cd 12345678 5.0 1000");
+        boolean actual = createValidator.validate("create cd 12345678 1000 5.0");
         assertTrue(actual);
     }
 
@@ -163,7 +163,7 @@ public class CreateValidatorTest {
 
     @Test
     void create_account_with_apr_exceeding_ten() {
-        boolean actual = createValidator.validate("Create checking 12345678 11.0");
+        boolean actual = createValidator.validate("Create checking 12345678 0 11.0");
         assertFalse(actual);
     }
 
