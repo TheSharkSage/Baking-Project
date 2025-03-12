@@ -69,7 +69,7 @@ public class CommandProcessor {
                 account = new Checking(id, apr);
                 break;
             case "savings": 
-                account = new Savings(id);
+                account = new Savings(id, apr);
                 break;
             case "cd":
                 double startAmount = Double.parseDouble(parts[4]);
