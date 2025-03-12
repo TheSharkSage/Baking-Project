@@ -1,13 +1,19 @@
 package banking;
 
 public class CD extends Account{
-    public CD(int accountId, double apr) {
-        super(accountId, 0, apr);
+    // starting limits for account
+    private static final double MIN_BALANCE = 1000;
+    private static final double MAX_BALANCE = 10000;
+
+    public CD(int accId, double apr, double balance) {
+        super(accId, apr, balance);
+
+        //check for foundational errors with account creation
+        if (balance < MIN_BALANCE || balance > MAX_BALANCE) {
+            throw new IllegalArgumentException("CD balance must be between $" + MIN_BALANCE + " and $" + MAX_BALANCE);
+        }
     }
 
-    public CD(int accId, double balance, double apr) {
-        super(accId, balance, apr);
-    }
 
     @Override
     public boolean withdraw(double money) {

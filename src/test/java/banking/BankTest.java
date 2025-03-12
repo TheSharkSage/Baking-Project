@@ -13,6 +13,7 @@ public class BankTest {
     public static final int SAVINGS_ID = 87654321;
     public static final int MONEY = 20;
     private static final int CD_ID = 12341234;
+    public static final double APR = 10.0;
     Bank bank;
     public Account checking;
     public Account savings;
@@ -21,9 +22,9 @@ public class BankTest {
     @BeforeEach
     void setUp() {
         bank = new Bank();//make a new bank with each test case
-        checking = new Checking(CHECKING_ID);
+        checking = new Checking(CHECKING_ID, APR);
         savings = new Savings(SAVINGS_ID);
-        cd = new CD(CD_ID, 10);
+        cd = new CD(CD_ID, 10, MONEY);
     }
 
 
@@ -71,8 +72,8 @@ public class BankTest {
     @Test
     public void deposit_multiple_times() {
         bank.addAccount(checking);
-        bank.findAccount(CHECKING_ID).deposit(100);
-        bank.findAccount(CHECKING_ID).deposit(140);
+        checking.deposit(100);
+        checking.deposit(140);
 
         assertEquals(240, bank.findAccount(CHECKING_ID).getBalance());
     }
@@ -166,9 +167,10 @@ public class BankTest {
 
     @Test
     public void transfer_between_same_account_types() {
-        Account checking2 = new Checking(12341234, 100);
+        Account checking2 = new Checking(12341234, 10);
         bank.addAccount(checking);
         bank.addAccount(checking2);
+        singleDeposit(checking2, 12341234, 50);
 
         bank.transfer(12341234, CHECKING_ID, 50);
         double actual = bank.findAccount(CHECKING_ID).getBalance();

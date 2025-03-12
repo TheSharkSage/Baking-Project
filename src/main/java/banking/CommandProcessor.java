@@ -34,7 +34,7 @@ public class CommandProcessor {
 
         }
 
-    private void processDepositCommand(String[] parts) {
+    private boolean processDepositCommand(String[] parts) {
         //[deposit, accoutnId, amount]
         int id = Integer.parseInt(parts[1]);
         double amount = Double.parseDouble(parts[2]);
@@ -43,10 +43,10 @@ public class CommandProcessor {
 
         if(account == null) {
             System.out.println("banking.Account not found");
-            return;
+            return false;
         }
         
-        account.deposit(amount);
+        return account.deposit(amount);
     }
 
     private void processCreateCommand(String[] parts) {
@@ -55,30 +55,25 @@ public class CommandProcessor {
         //[create, accType, accId, ]
         String type = parts[1];
         int id = Integer.parseInt(parts[2]);
-
-        //optional object declaration for apr if included
-        Double apr = null; 
-        if(parts.length == 4) {
-            apr = Double.parseDouble(parts[3]);
+        double apr = Double.parseDouble(parts[3]);
+        if (parts.length == 5) {
+            // establish token for start amount when included with CD command
+            double startAmount = Double.parseDouble(parts[4]);
         }
+
 
         Account account = null;
         
         switch(type) {
             case "checking":
-                account = new Checking(id);
-                if(apr != null) {
-                    account.setAPR(apr);
-                }
+                account = new Checking(id, apr);
                 break;
             case "savings": 
                 account = new Savings(id);
-                if(apr !=  null) {
-                    account.setAPR(apr);
-                }
                 break;
             case "cd":
-                account = new CD(id, apr);
+                double startAmount = Double.parseDouble(parts[4]);
+                account = new CD(id, apr, startAmount);
                 break;
             default:
                 //output when command syntax is valid but account type doesn't exist

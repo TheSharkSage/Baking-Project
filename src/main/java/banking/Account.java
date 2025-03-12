@@ -6,16 +6,19 @@ public abstract class Account {
     protected double APR;
     protected int creationDate;
 
-    public Account(int accountId, double startAmount) { //the name of the account
+    // constructor for saving and checking
+    public Account(int accountId, double apr) { //the name of the account
         this.accountId = accountId; //the current account holder's name
-        this.balance = startAmount;
+        this.APR = apr;
+        this.balance = 0;
     }
     
-    //overloaded constructor
-    public Account(int accountId, double startAmount, double apr) { //the name of the account
+    //overloaded constructor for CD
+    public Account(int accountId, double apr, double startAmount) { //the name of the account
         this.accountId = accountId; //the current account holder's name
-        this.balance = startAmount;
         this.APR = apr;
+        this.balance = startAmount;
+
     }
 
 

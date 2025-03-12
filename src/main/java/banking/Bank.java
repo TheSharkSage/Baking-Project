@@ -154,7 +154,11 @@ public class Bank {
 
     private void accrueAPR() {
         // divide apr by 12
-        //todo APR compounded monthly formula
+        //convert apr to percentage
+        //divide by 12
+        //multiply balance by new decimal
+        //add new decimal to balance
+
     }
 }
 

@@ -1,20 +1,14 @@
 package banking;
 
 public class Checking extends Account {
-    //private double balance;
+    // checking starts with 0 dollars
+    private double balance = 0;
 
     //constructors
-    public Checking(int accId) {
-        super( accId, 0);
+    public Checking(int accId, double apr) {
+        super( accId, 0, apr);
     }
 
-    public Checking(int accId, double balance) {
-        super( accId, balance );
-    }
-
-    public Checking(int accId, double balance, double apr) {
-        super( accId, balance, apr);
-    }
 
 
 
