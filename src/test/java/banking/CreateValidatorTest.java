@@ -1,3 +1,5 @@
+package banking;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -6,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CreateValidatorTest {
     private static final int ID = 12345678;
-    private CreateValidator createValidator;
+    private CommandValidator createValidator;
 
     private Bank bank;
     public Account checking;
@@ -27,9 +29,9 @@ public class CreateValidatorTest {
 
     @Test
     void duplicate_account_id_is_invalid() {
-        //Account savings = new Savings(ID);
+        //banking.Account savings = new banking.Savings(ID);
         bank.addAccount(checking);
-        boolean actual = createValidator.validate("Create Savings 12345678");
+        boolean actual = createValidator.validate("Create banking.Savings 12345678");
         assertFalse(actual);
     }
 
@@ -70,6 +72,12 @@ public class CreateValidatorTest {
     }
 
     @Test
+    void create_account_with_balance() {
+        boolean actual = createValidator.validate("Create checking 12345678 20.00 5.0");
+        assertTrue(actual);
+    }
+
+    @Test
     void command_with_extra_spaces_is_invalid() {
         boolean actual = createValidator.validate("Create  Savings  12345678");
         assertFalse(actual);
@@ -101,7 +109,7 @@ public class CreateValidatorTest {
 
     @Test
     void cd_valid_parameters_is_valid() {
-        boolean actual = createValidator.validate("Create CD 12345678 5.0 1000");
+        boolean actual = createValidator.validate("Create CD 12345678 1000 5.0");
         assertTrue(actual);
     }
 
@@ -119,19 +127,19 @@ public class CreateValidatorTest {
 
     @Test
     void cd_extra_parameters_is_invalid() {
-        boolean actual = createValidator.validate("Create CD 12345678 5.0 1000 extraParam");
+        boolean actual = createValidator.validate("Create CD 12345678 1000 5.0 extraParam");
         assertFalse(actual);
     }
 
     @Test
     void cd_mixed_case_with_valid_parameters_is_valid() {
-        boolean actual = createValidator.validate("CrEaTe Cd 12345678 5.0 1000");
+        boolean actual = createValidator.validate("CrEaTe Cd 12345678 1000 5.0 ");
         assertTrue(actual);
     }
 
     @Test
     void cd_all_lowercase_with_valid_parameters_is_valid() {
-        boolean actual = createValidator.validate("create cd 12345678 5.0 1000");
+        boolean actual = createValidator.validate("create cd 12345678 1000 5.0");
         assertTrue(actual);
     }
 
@@ -155,7 +163,7 @@ public class CreateValidatorTest {
 
     @Test
     void create_account_with_apr_exceeding_ten() {
-        boolean actual = createValidator.validate("Create checking 12345678 11.0");
+        boolean actual = createValidator.validate("Create checking 12345678 0 11.0");
         assertFalse(actual);
     }
 

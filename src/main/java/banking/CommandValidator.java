@@ -1,12 +1,24 @@
+package banking;
+
 public class CommandValidator {
     protected Bank bank;
-
-    //will defer all inputs to the childrne based on the first command
-    //recommended to use a switch case
 
     //constructor
     public CommandValidator(Bank bank) {
         this.bank = bank;
+    }
+
+    public static CommandValidator getValidator(String commandType, Bank bank) {
+        //check the first field and delegate to child class
+        switch(commandType) {
+            case "create":
+                return new CreateValidator(bank);
+            case "deposit":
+                return new DepositValidator(bank);
+            default:
+                //output when command syntax is valid but type doesn't exist
+                return new CommandValidator(bank);
+        }
     }
 
     //template for validation
@@ -28,7 +40,7 @@ public class CommandValidator {
     // }
 
 
-   public boolean isValidAmount(String amount) {
+    protected boolean isValidAmount(String amount) {
         //convert string amount to a double
         try {
             double value = Double.parseDouble(amount);//parse the double to convert every value
@@ -58,20 +70,9 @@ public class CommandValidator {
             }
         }
 
-        //check the first field and delegate to child class
-        switch(commandType) {
-            case "create":
-                //instantiate a child to delegate command
-                CreateValidator create= new CreateValidator(bank);
-                return create.validateSpecific(parts);
-            case "deposit":
-                DepositValidator deposit = new DepositValidator(bank);
-                return deposit.validateSpecific(parts);
-            default:
-                //output when command syntax is valid but  type doesn't exist
-                //throw new IllegalArgumentException("Invalid Command Type");
-                return false;
-        }
+        CommandValidator validator = getValidator(commandType, bank);
+        return validator.validateSpecific(parts);
+
     }
 
 

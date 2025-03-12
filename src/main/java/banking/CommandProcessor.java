@@ -1,3 +1,5 @@
+package banking;
+
 public class CommandProcessor {
     private Bank bank;
 
@@ -40,7 +42,7 @@ public class CommandProcessor {
         Account account = bank.findAccount(id);
 
         if(account == null) {
-            System.out.println("Account not found");
+            System.out.println("banking.Account not found");
             return;
         }
         
@@ -80,7 +82,7 @@ public class CommandProcessor {
                 break;
             default:
                 //output when command syntax is valid but account type doesn't exist
-                throw new IllegalArgumentException("Invalid Account Type");
+                throw new IllegalArgumentException("Invalid banking.Account Type");
         }
 
         bank.addAccount(account);
