@@ -3,10 +3,10 @@ package banking;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CDTest{
-    public static final double INIT_BALANCE = 170.56;
+    public static final double INIT_BALANCE = 1000;
     public static final int QUICK_ID = 12345678;
     public static final double APR = 10.0;
     public static final int CURENT_MONTH = 0;
@@ -26,9 +26,8 @@ public class CDTest{
 
     @Test
     public void cannot_receive_deposit() {
-        cd.deposit(10);
-        double actual = cd.getBalance();
-        assertEquals(170.56, actual);
+        boolean actual = cd.deposit(10);
+        assertFalse(actual);
     }
 
 }

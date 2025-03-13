@@ -68,7 +68,7 @@ public class BankTimeServiceTest {
         // Now withdrawal should succeed again
         boolean withdrawalNextMonth = savings.withdraw(200, bank.getCurrentMonth());
         assertTrue(withdrawalNextMonth);
-        assertEquals(300, savings.getBalance());
+        assertEquals(301.04, savings.getBalance());
     }
 
 

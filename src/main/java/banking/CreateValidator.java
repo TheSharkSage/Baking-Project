@@ -26,47 +26,39 @@ public class CreateValidator extends CommandValidator {
             return false;
         }
 
-        if (command.length > 3) {
-            System.out.println("Attempting to parse APR from: " + command[3]);
-            // Parsing logic
-        }
-        //todo checking commands have 4 parameters [create checking, accId, apr]
-        // CD commands have 5 parameters [create, cd, accId, apr, balance]
-
-        // Before attempting to parse, check if the element exists
-        if (command[3] != null) {
-            try {
-                Double.parseDouble(command[3]);
-                // Process APR
-            } catch (NumberFormatException e) {
-                // Handle invalid number format
-                return false;
-            }
-        }
-
+        // Check account type
         if(!isValidAccountType(accType)) {
             System.out.println("Invalid account type");
             return false;
         }
 
-        // validate CD parameters
-        if (accType.equals("cd")) {
-            return validateCDParameters(command);
-        }
-
+        // Validate account ID format
         if (!isValidAccountID(accIdStr)) {
             System.out.println("Invalid account ID");
             return false;
         }
+
+        // Parse account ID
         int accId = Integer.parseInt(accIdStr);
 
-        if(super.bank.accountExistsByID(accId)) {
+        // Check for duplicate account ID - THIS IS THE KEY CHECK
+        if(bank.accountExistsByID(accId)) {
             System.out.println("Account ID already exists");
             return false;
         }
 
-        //run validation methods
-        return isValidApr(aprAmount);
+        // Validate APR
+        if (!isValidApr(aprAmount)) {
+            System.out.println("Invalid APR");
+            return false;
+        }
+
+        // For CD accounts, validate additional parameters
+        if (accType.equals("cd")) {
+            return validateCDParameters(command);
+        }
+
+        return true;
     }
 
     //validation helpers
@@ -86,6 +78,7 @@ public class CreateValidator extends CommandValidator {
         }
 
         try {
+            //command[3] = new DecimalFormat("#.##").format(command[3]);
             //convert the apr from string to double
             double apr = Double.parseDouble(command[3]);
 

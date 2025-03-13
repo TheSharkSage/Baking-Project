@@ -29,7 +29,7 @@ public class TransferValidator extends CommandValidator {
         }
 
         //run validation methods
-        if (isValidAccountID(fromAccId) || isValidAccountID(toAccId)) {
+        if (!isValidAccountID(fromAccId) || !isValidAccountID(toAccId)) {
             System.out.println("Invalid account ID");
             return false;
         }
@@ -61,7 +61,7 @@ public class TransferValidator extends CommandValidator {
 
     public boolean isValidAccountID(String accountId) {
         //validate the proper id length
-        return accountId == null || !accountId.matches("\\d{8}");
+        return accountId == null && !accountId.matches("\\d{8}");
     }
 
 }

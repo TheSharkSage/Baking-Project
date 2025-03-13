@@ -30,6 +30,7 @@ public class MasterControl {
             }
             else {
                 commandStorage.addInvalidCommand(command);
+                //commandStorage
             }
 
         }

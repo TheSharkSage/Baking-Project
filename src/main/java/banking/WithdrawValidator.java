@@ -6,6 +6,12 @@ public class WithdrawValidator extends CommandValidator{
         super(bank);
         this.bank = bank;
         //dependency injection for time passing
+        this.timeService = new BankTimeService();
+    }
+
+    public WithdrawValidator(Bank bank, TimeService timeService) {
+        super(bank);
+        this.bank = bank;
         this.timeService = timeService;
     }
 
@@ -32,8 +38,9 @@ public class WithdrawValidator extends CommandValidator{
         }
         int accId = Integer.parseInt(accIdStr);
 
-        if(bank.accountExistsByID(accId)) {
-            System.out.println("banking.Account ID already exists");
+        //check for duplicates
+        if(!bank.accountExistsByID(accId)) {
+            System.out.println("banking.Account ID does not exist");
             return false;
         }
 

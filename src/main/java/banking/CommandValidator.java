@@ -13,6 +13,14 @@ public class CommandValidator {
         return bank;
     }
 
+    protected boolean accountDoesNotExist(int accountId) {
+        return !bank.accountExistsByID(accountId);
+    }
+
+    protected boolean accountAlreadyExists(int accountId) {
+        return bank.accountExistsByID(accountId);
+    }
+
     public static CommandValidator getValidator(String commandType, Bank bank) {
         //check the first field and delegate to child class
         switch(commandType) {

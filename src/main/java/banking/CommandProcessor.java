@@ -30,6 +30,7 @@ public class CommandProcessor {
                 break;
             case "pass":
                 processPassCommand(parts);
+                break;
             default:
                 System.out.println("Invalid Command Passed to process");
                 return;

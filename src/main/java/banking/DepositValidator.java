@@ -17,7 +17,6 @@ public class DepositValidator extends  CommandValidator{
         String accIdStr = command[1];
         String amount = command[2];
 
-
         if(bank.getAccounts().isEmpty()) {
             return false;
         }
@@ -36,11 +35,10 @@ public class DepositValidator extends  CommandValidator{
         }
         int accId = Integer.parseInt(accIdStr);
 
-        if(bank.accountExistsByID(accId)) {
-            System.out.println("banking.Account ID already exists");
+        if(!bank.accountExistsByID(accId)) {
+            System.out.println("banking.Account ID doesn't exist");
             return false;
         }
-
 
 
         if (!super.isValidAmount(amount)) {
@@ -48,6 +46,11 @@ public class DepositValidator extends  CommandValidator{
             return false;
         }
 
+
+        double balance = Double.parseDouble(command[2]);
+        if(balance > 2500) {
+            return false;
+        }
         return true;
     }
 
