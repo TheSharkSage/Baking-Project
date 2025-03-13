@@ -86,7 +86,6 @@ public class CreateValidator extends CommandValidator {
         }
 
         try {
-            //command[3] = new DecimalFormat("#.##").format(command[3]);
             //convert the apr from string to double
             double apr = Double.parseDouble(command[3]);
 

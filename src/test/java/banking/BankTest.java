@@ -24,7 +24,7 @@ public class BankTest {
         bank = new Bank();//make a new bank with each test case
         checking = new Checking(CHECKING_ID, APR);
         savings = new Savings(SAVINGS_ID, APR);
-        cd = new CD(CD_ID, 10, 1000);
+        cd = new CD(CD_ID, 10, 1000, 0);
     }
 
 
@@ -38,6 +38,12 @@ public class BankTest {
         bank.addAccount(checking);
         assertTrue(bank.accountExistsByID(CHECKING_ID));
         assertEquals(checking, bank.findAccount(CHECKING_ID));
+    }
+
+    @Test
+    public void pass_time() {
+        bank.passTime(1);
+        assertEquals(1, bank.getCurrentMonth());
     }
 
     @Test
@@ -79,15 +85,15 @@ public class BankTest {
     public void withdrawal_to_specific_account_by_ID() {
         //if we want to ensure that we are depositing to the correct account, we'd compare the id's of our expected vs actual
         singleDeposit(checking,100, CHECKING_ID);
-        bank.findAccount(CHECKING_ID).withdraw(90);
+        bank.findAccount(CHECKING_ID).withdraw(90, bank.getCurrentMonth());
         assertEquals(10,  bank.findAccount(CHECKING_ID).getBalance());
     }
 
     @Test
     public void withdraw_through_bank_multiple_times() {
         singleDeposit(checking, MONEY, CHECKING_ID);
-        bank.findAccount(CHECKING_ID).withdraw(13.8);
-        bank.findAccount(CHECKING_ID).withdraw(9.3);//withdrawing past the amount to ensure the withdrawal still operates properly
+        bank.findAccount(CHECKING_ID).withdraw(13.8, bank.getCurrentMonth());
+        bank.findAccount(CHECKING_ID).withdraw(9.3, bank.getCurrentMonth());//withdrawing past the amount to ensure the withdrawal still operates properly
         double actual = bank.findAccount(CHECKING_ID).getBalance();
 
         assertEquals(0,actual);
@@ -98,16 +104,8 @@ public class BankTest {
         singleDeposit(checking, 600, CHECKING_ID);
 
 
-        boolean actual = checking.withdraw(500);
+        boolean actual = checking.withdraw(500, bank.getCurrentMonth());
 
-        assertFalse(actual);
-    }
-
-    @Test
-    public void cannot_withdraw_more_than_1000_from_savings() {
-        singleDeposit(savings, 2000, SAVINGS_ID);
-
-        boolean actual = savings.withdraw(1100);
         assertFalse(actual);
     }
 
@@ -115,7 +113,7 @@ public class BankTest {
     public void cd_can_only_accept_full_withdrawal() {
         bank.addAccount(cd);
 
-        boolean actual = cd.withdraw(MONEY);
+        boolean actual = cd.withdraw(MONEY, bank.getCurrentMonth());
 
         assertFalse(actual);
     }

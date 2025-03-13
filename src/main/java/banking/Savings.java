@@ -36,7 +36,7 @@ public class Savings extends Account{
             super.setBalance(super.getBalance() - money);
         } else {
             //if the amount exceeds the balance, then take as much money from the account as possible
-            balance = 0;
+            super.setBalance(0);
         }
 
         lastWithdrawalMonth = currentMonth;

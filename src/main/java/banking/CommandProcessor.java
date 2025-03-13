@@ -12,7 +12,7 @@ public class CommandProcessor {
     public void process(String command) {
         //check command type
         String[] parts = command.split(" ");
-        String commandType = parts[0];
+        String commandType = parts[0].toLowerCase();
 
         //test each command with their own method
         switch(commandType) {
@@ -25,10 +25,11 @@ public class CommandProcessor {
             case "withdraw":
                 processWithdrawCommand(parts);
                 break;
-//            case "transfer":
-//                processGetAprCommand(parts);
-//                break;
-              //case ""
+            case "transfer":
+                processTransferCommand(parts);
+                break;
+            case "pass":
+                processPassCommand(parts);
             default:
                 System.out.println("Invalid Command Passed to process");
                 return;
@@ -36,11 +37,17 @@ public class CommandProcessor {
 
         }
 
+    private void processPassCommand(String[] parts) {
+        int months = Integer.parseInt(parts[1]);
+        bank.passTime(months);
+    }
+
+
     private void processCreateCommand(String[] parts) {
         //read teh create command and then execute it using the bank classes
         //sk for account, ask fork account, then process command
         //[create, accType, accId, ]
-        String type = parts[1];
+        String type = parts[1].toLowerCase();
         int id = Integer.parseInt(parts[2]);
         double apr = Double.parseDouble(parts[3]);
 
@@ -94,6 +101,15 @@ public class CommandProcessor {
         }
         
         bank.withdraw(id, amount);
+    }
+
+    private void processTransferCommand(String[] parts) {
+        int fromAccount = Integer.parseInt(parts[1]);
+        int toAccount = Integer.parseInt(parts[2]);
+        double amount = Double.parseDouble(parts[3]);
+
+        bank.transfer(fromAccount, toAccount, amount);
+
     }
 
 }
