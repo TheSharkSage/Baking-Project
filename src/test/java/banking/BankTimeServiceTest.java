@@ -3,8 +3,7 @@ package banking;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BankTimeServiceTest {
     private Bank bank;
@@ -30,4 +29,47 @@ public class BankTimeServiceTest {
         assertEquals(2000, cd.getBalance());
 
     }
+
+    @Test
+    public void cd_withdraw_after_12_months_is_valid() {
+        // create cd instance
+        Account cd = new CD(CD_ID, 5.0, 2000, bank.getCurrentMonth());
+        bank.addAccount(cd);
+
+        bank.passTime(12);
+
+        boolean actual = bank.withdraw(CD_ID, 2000);
+        assertTrue(actual);
+        assertEquals(0, cd.getBalance());
+    }
+
+    @Test
+    void savings_withdrawal_frequency_limit() {
+        // Create a Savings account
+        Account savings = new Savings(SAVINGS_ID, 2.5);
+        bank.addAccount(savings);
+
+        // Deposit some money
+        savings.deposit(1000);
+
+        // First withdrawal in a month should succeed
+        boolean firstWithdrawal = savings.withdraw(500, bank.getCurrentMonth());
+        assertTrue(firstWithdrawal);
+        assertEquals(500, savings.getBalance());
+
+        // Second withdrawal in the same month should fail
+        boolean secondWithdrawal = savings.withdraw(200, bank.getCurrentMonth());
+        assertFalse(secondWithdrawal);
+        assertEquals(500, savings.getBalance());
+
+        // Pass a month
+        bank.passTime(1);
+
+        // Now withdrawal should succeed again
+        boolean withdrawalNextMonth = savings.withdraw(200, bank.getCurrentMonth());
+        assertTrue(withdrawalNextMonth);
+        assertEquals(300, savings.getBalance());
+    }
+
+
 }
