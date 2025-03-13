@@ -7,11 +7,8 @@ public class Checking extends Account {
         super( accId, 0);
     }
 
-
-
-
     @Override
-    public boolean withdraw(double money) {
+    public boolean withdraw(double money, int currentMonth) {
         //withdrawal limit
         if(money > 400) {
             System.out.println("Cannot withdraw More than 400 at a time");

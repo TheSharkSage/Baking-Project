@@ -36,7 +36,7 @@ public class CreateValidator extends CommandValidator {
         // Before attempting to parse, check if the element exists
         if (command[3] != null) {
             try {
-                double apr = Double.parseDouble(command[3]);
+                Double.parseDouble(command[3]);
                 // Process APR
             } catch (NumberFormatException e) {
                 // Handle invalid number format
@@ -93,8 +93,13 @@ public class CreateValidator extends CommandValidator {
             if (apr < 0 || apr > 10.00) {
                 return false;
             }
-            //convert amount into string
+            //convert from string to double
             double balance = Double.parseDouble(command[4]);
+
+            if(balance < CD_MIN_BALANCE || balance > CD_MAX_BALANCE) {
+                return false;
+            }
+
             DecimalFormat decimalFormat = new DecimalFormat("0.00");
             decimalFormat.setRoundingMode(RoundingMode.FLOOR);
 

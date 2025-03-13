@@ -45,6 +45,8 @@ public class WithdrawValidator extends CommandValidator{
             return false;
         }
 
+        // add check for CD withdrawl amount
+
         return true;
     }
 
@@ -52,6 +54,6 @@ public class WithdrawValidator extends CommandValidator{
 
     public boolean isValidAccountID(String accountId) {
         //validate the proper id length
-        return accountId != null || accountId.matches("\\d{8}");
+        return accountId != null && accountId.matches("\\d{8}");
     }
 }

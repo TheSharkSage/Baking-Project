@@ -22,9 +22,9 @@ public class MasterControl {
             //process for validate command and store invalid command
             if((commandValidator.validate(command))) {
                 commandProcessor.process(command);
+                commandStorage.addValidCommand(command);
             }
             else {
-
                 commandStorage.addInvalidCommand(command);
             }
 

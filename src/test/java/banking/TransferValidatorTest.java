@@ -20,7 +20,7 @@ public class TransferValidatorTest {
     void setUp() {
         bank = new Bank();
         checking = new Checking(CHECKING_ID, APR);
-        savings = new Savings(SAVINGS_ID);
+        savings = new Savings(SAVINGS_ID, APR);
         transferValidator = new CommandValidator(bank);
     }
 
