@@ -8,6 +8,11 @@ public class CommandValidator {
         this.bank = bank;
     }
 
+    //getter
+    public Bank getBank() {
+        return bank;
+    }
+
     public static CommandValidator getValidator(String commandType, Bank bank) {
         //check the first field and delegate to child class
         switch(commandType) {

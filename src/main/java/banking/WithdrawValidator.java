@@ -32,7 +32,7 @@ public class WithdrawValidator extends CommandValidator{
         }
         int accId = Integer.parseInt(accIdStr);
 
-        if(!bank.accountExistsByID(accId)) {
+        if(bank.accountExistsByID(accId)) {
             System.out.println("banking.Account ID already exists");
             return false;
         }

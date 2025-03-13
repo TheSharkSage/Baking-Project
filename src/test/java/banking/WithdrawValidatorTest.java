@@ -22,7 +22,7 @@ public class WithdrawValidatorTest {
     @Test
     void withdraw_negative_amount() {
         bank.addAccount(checking);
-        boolean actual = withdrawValidator.validate("Withdraw -100");
+        boolean actual = withdrawValidator.validate("Withdraw 12345678 -100");
         assertFalse(actual);
     }
 //todo debug

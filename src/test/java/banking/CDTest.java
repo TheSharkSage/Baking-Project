@@ -14,7 +14,7 @@ public class CDTest{
 
     @BeforeEach
     public void setUp(){
-        cd = new CD(QUICK_ID, INIT_BALANCE, APR, CURENT_MONTH);
+        cd = new CD(QUICK_ID, APR, INIT_BALANCE, CURENT_MONTH);
     }
 
     @Test

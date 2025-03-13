@@ -3,9 +3,12 @@ package banking;
 import java.util.List;
 
 public class MasterControl {
+    private Bank bank;
     private CommandValidator commandValidator;
     private CommandProcessor commandProcessor;
     private CommandStorage commandStorage;
+
+    //reference the bank
 
     //constructor
     public MasterControl(CommandValidator commandValidator,
@@ -15,6 +18,7 @@ public class MasterControl {
         this.commandProcessor = commandProcessor;
         this.commandStorage = commandStorage;
 
+        this.bank = commandValidator.getBank();
     }
 
     public List<String> start(List<String> input) {
@@ -30,7 +34,9 @@ public class MasterControl {
 
         }
 
-        return commandStorage.getInvalidCommands();
+        // Generate output
+        OutputGenerator outputGenerator = new OutputGenerator(bank, commandStorage);
+        return outputGenerator.generateOutput();
     }
 
 }

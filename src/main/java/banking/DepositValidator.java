@@ -1,7 +1,6 @@
 package banking;
 
 public class DepositValidator extends  CommandValidator{
-    Bank bank = new Bank();
 
     public DepositValidator(Bank bank) {
         super(bank);
@@ -9,12 +8,6 @@ public class DepositValidator extends  CommandValidator{
     }
 
     //Override methods
-
-    //commented out until other transaction validators are implemented
-//    @Override
-//    public int getMinimumPartsRequired() {
-//        return 3;
-//    }
 
     @Override
     public boolean validateSpecific(String[] command) {
