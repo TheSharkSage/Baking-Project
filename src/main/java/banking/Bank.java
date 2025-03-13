@@ -8,12 +8,19 @@ import java.util.ArrayList;
 
 public class Bank {
     private Map<Integer, Account> accounts;
-    private int currentMonth;
+    private TimeService timeService; // implement a time service for the bank to call on
 
+    // constructor for time framework
     public Bank() {
-        accounts = new HashMap<>();
-        currentMonth = 0;
+        this(new BankTimeService());
     }
+
+    //dependency injection
+    public Bank(TimeService timeService) {
+        accounts = new HashMap<>();
+        this.timeService = timeService;
+    }
+
 
     public Map<Integer, Account> getAccounts() {//a list of all the accounts stored, with a key to each account
         return new HashMap<>(accounts);//retrieve bank account info
@@ -21,6 +28,10 @@ public class Bank {
     //make a method that looks for an id based off a number
 
     //Make a method for each account that can be made
+
+    public int getCurrentMonth() {
+        return timeService.getCurrentMonth();
+    }
 
     public void addAccount(Account account) {
         if (account == null) {
@@ -54,11 +65,11 @@ public class Bank {
         return true;
     }
 
-    // Returns true if the withdrawl was successful
+    // Returns true if the withdrawal was successful
     // Returns false if the account does not exist or insufficient funds
     public boolean withdraw(int accountId, double amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("Withdrawl amount must be greater than 0");
+            throw new IllegalArgumentException("Withdrawal amount must be greater than 0");
         }
 
         Account account = findAccount(accountId);
@@ -67,18 +78,13 @@ public class Bank {
             return false;
         }
 
-        if (amount >= account.getBalance()){
-            System.out.println("Insufficient funds");
-            return false;
-        }
-        
-        account.withdraw(amount);
-        return true;
+        //all account subclasses handle amount exceeding the balance, no need to check
+        return account.withdraw(amount, timeService.getCurrentMonth());
     }
 
     public boolean transfer(int fromAccountId, int toAccountId, double amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("Withdrawl amount must be greater than 0");
+            throw new IllegalArgumentException("Withdrawal amount must be greater than 0");
         }
         
         Account toAccount = findAccount(toAccountId);
@@ -89,15 +95,17 @@ public class Bank {
             return false;
         }
 
-        // Check if the fromAccount has enough money
+        // Transfer the as much money from the account as possible if the amount exceeds balance
         if (amount > fromAccount.getBalance()){
-            System.out.println("Insufficient funds");
-            return false;
+            System.out.println("Insufficient funds, transferred max possible value");
+            //return false;
+            //deposit the balance of the account to the new account and then withdraw from the whole account
+            return toAccount.deposit(fromAccount.getBalance()) && fromAccount.withdraw(fromAccount.getBalance(), timeService.getCurrentMonth());
         }
 
         // perform the transfer
         //if there is an error with the withdrawal or deposit, the transfer won't execute
-        return fromAccount.withdraw(amount) && toAccount.deposit(amount);
+        return fromAccount.withdraw(amount, timeService.getCurrentMonth()) && toAccount.deposit(amount);
 
         //return true;
     }
@@ -119,7 +127,7 @@ public class Bank {
     public void passTime(int numMonths) {
         for (int i=0; i < numMonths; i++) {
             // advance months with each iteration
-            currentMonth++;
+            timeService.advanceMonth(numMonths);
             closeEmptyAccounts();
             deductFromLowAccounts();
             accrueAPR();
@@ -145,14 +153,24 @@ public class Bank {
     private void deductFromLowAccounts() {       
         for (Account a : accounts.values()) {
             if(a.getBalance() < 100) {
-                a.withdraw(25);
+                // doesnt interfere w/ savings account restrictions
+                a.setBalance(a.getBalance() - 25);
             }
         }
     }
 
     private void accrueAPR() {
-        // divide apr by 12
-        //todo APR compounded monthly formula
+        //Todo iterate for cd accounts and accrue the apr 4 times within a month
+        //List<Account> cdAccountsToAccrue = new ArrayList<>();
+
+        for (Account a: accounts.values()) {
+            // retrieve apr, convert to a percentage, divide by months ina year
+            double monthlyInterest = (a.getAPR()/100)/12;
+            double monthlyYield = a.getBalance() * monthlyInterest; 
+            deposit(a.getAccountId(), monthlyYield);
+        }
+        // CD needs to accrue four times within a month
+
     }
 }
 
