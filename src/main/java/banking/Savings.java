@@ -27,7 +27,7 @@ public class Savings extends Account{
         }
 
         //withdrawal limit
-        if(money > 2500) {
+        if(money > 1000) {
             System.out.println("Cannot withdraw More than 1000 at a time");
             return false;
         }

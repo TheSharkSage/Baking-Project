@@ -28,11 +28,11 @@ public class DepositValidator extends  CommandValidator{
             return false;
         }
 
-        //run validation methods
-        if (!isValidAccountID(accIdStr)) {
-            System.out.println("Invalid account ID");
-            return false;
-        }
+//        //run validation methods
+//        if (!isValidAccountID(accIdStr)) {
+//            System.out.println("Invalid account ID");
+//            return false;
+//        }
         int accId = Integer.parseInt(accIdStr);
 
         if(!bank.accountExistsByID(accId)) {
@@ -47,11 +47,16 @@ public class DepositValidator extends  CommandValidator{
         }
 
 
-        double balance = Double.parseDouble(command[2]);
-        if(balance > 2500) {
+        Account account = bank.findAccount(accId);
+        double depositAmount = Double.parseDouble(amount);
+
+        if (account instanceof Checking && depositAmount > 400) {
+            System.out.println("Deposit amount exceeds 1000 for checking account");
             return false;
         }
-        return true;
+
+        return account instanceof Savings && depositAmount > 2500;
+
     }
 
     //Deposit validation helpers

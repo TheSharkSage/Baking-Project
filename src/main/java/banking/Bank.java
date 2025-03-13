@@ -129,7 +129,7 @@ public class Bank {
     public void passTime(int numMonths) {
         for (int i = 0; i < numMonths; i++) {
             // advance months with each iteration
-            timeService.advanceMonth(numMonths);
+            timeService.advanceMonth(1);
             closeEmptyAccounts();
             deductFromLowAccounts();
             accrueAPR();
@@ -198,7 +198,7 @@ public class Bank {
                 double truncatedYield = Double.parseDouble(decimalFormat.format(monthlyYield));
 
                 // Deposit the interest
-                a.setBalance(a.getAccountId() + truncatedYield);
+                a.setBalance(a.getBalance() + truncatedYield);
             }
 
         }
