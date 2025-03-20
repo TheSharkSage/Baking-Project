@@ -31,7 +31,7 @@ public class DepositValidatorTest {
     @Test
     void deposit_with_cents() {
         bank.addAccount(checking);
-        boolean actual = depositValidator.validate("Deposit 12345678 20.64");
+        boolean actual = depositValidator.validate("Deposit 87654321 20.64");
         assertTrue(actual);
     }
 
@@ -39,7 +39,7 @@ public class DepositValidatorTest {
     void deposit_large_amount() {
         bank.addAccount(checking);
         boolean actual = depositValidator.validate("Deposit 12345678 999999999.99");
-        assertTrue(actual);
+        assertFalse(actual);
     }
 
     @Test

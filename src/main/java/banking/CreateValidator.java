@@ -43,7 +43,7 @@ public class CreateValidator extends CommandValidator {
 
         // Check for duplicate account ID - THIS IS THE KEY CHECK
         if(bank.accountExistsByID(accId)) {
-            System.out.println("Account ID already exists");
+            //System.out.println("Account ID already exists");
             return false;
         }
 

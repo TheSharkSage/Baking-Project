@@ -51,11 +51,13 @@ public class DepositValidator extends  CommandValidator{
         double depositAmount = Double.parseDouble(amount);
 
         if (account instanceof Checking && depositAmount > 400) {
-            System.out.println("Deposit amount exceeds 1000 for checking account");
+            System.out.println("Deposit amount exceeds 400 for checking account");
             return false;
+        } else if (account instanceof  Checking && depositAmount < 400) {
+            return true;
         }
 
-        return account instanceof Savings && depositAmount > 2500;
+        return account instanceof Savings && depositAmount <= 2500;
 
     }
 

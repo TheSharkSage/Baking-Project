@@ -2,7 +2,7 @@ package banking;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
@@ -19,13 +19,13 @@ public class Bank {
 
     //dependency injection
     public Bank(TimeService timeService) {
-        accounts = new HashMap<>();
+        accounts = new LinkedHashMap<>();
         this.timeService = timeService;
     }
 
 
     public Map<Integer, Account> getAccounts() {//a list of all the accounts stored, with a key to each account
-        return new HashMap<>(accounts);//retrieve bank account info
+        return new LinkedHashMap<>(accounts);//retrieve bank account info
     }
     //make a method that looks for an id based off a number
 

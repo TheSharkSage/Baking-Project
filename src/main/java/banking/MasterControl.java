@@ -23,16 +23,21 @@ public class MasterControl {
 
     public List<String> start(List<String> input) {
         for(String command : input) {
-            //process for validate command and store invalid command
-            if((commandValidator.validate(command))) {
+            // Check if it's a pass command (we'll process it but not store it)
+            boolean isPassCommand = command.toLowerCase().startsWith("pass ");
+
+            // Process only valid commands
+            if(commandValidator.validate(command)) {
                 commandProcessor.process(command);
-                commandStorage.addValidCommand(command);
+
+                // Only store non-pass commands
+                if (!isPassCommand) {
+                    commandStorage.addValidCommand(command);
+                }
             }
             else {
                 commandStorage.addInvalidCommand(command);
-                //commandStorage
             }
-
         }
 
         // Generate output

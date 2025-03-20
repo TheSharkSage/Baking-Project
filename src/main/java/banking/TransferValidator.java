@@ -61,7 +61,7 @@ public class TransferValidator extends CommandValidator {
 
     public boolean isValidAccountID(String accountId) {
         //validate the proper id length
-        return accountId == null && accountId.matches("\\d{8}");
+        return accountId != null && accountId.matches("\\d{8}");
     }
 
 }
