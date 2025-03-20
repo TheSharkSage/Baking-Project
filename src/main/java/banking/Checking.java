@@ -1,25 +1,14 @@
 package banking;
 
 public class Checking extends Account {
-    //private double balance;
 
     //constructors
-    public Checking(int accId) {
+    public Checking(int accId, double apr) {
         super( accId, 0);
     }
 
-    public Checking(int accId, double balance) {
-        super( accId, balance );
-    }
-
-    public Checking(int accId, double balance, double apr) {
-        super( accId, balance, apr);
-    }
-
-
-
     @Override
-    public boolean withdraw(double money) {
+    public boolean withdraw(double money, int currentMonth) {
         //withdrawal limit
         if(money > 400) {
             System.out.println("Cannot withdraw More than 400 at a time");
@@ -28,8 +17,10 @@ public class Checking extends Account {
 
         if (balance >= money) {
             super.setBalance(super.getBalance() - money);
+
+            return true;
         } else {
-            balance = 0;
+            super.setBalance(0);
         }
         return true;
     }

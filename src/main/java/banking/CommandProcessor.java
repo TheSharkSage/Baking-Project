@@ -3,6 +3,7 @@ package banking;
 public class CommandProcessor {
     private Bank bank;
 
+    // TODO: store the logged commands within a list 
 
     public CommandProcessor(Bank bank) {
         this.bank = bank;
@@ -11,7 +12,7 @@ public class CommandProcessor {
     public void process(String command) {
         //check command type
         String[] parts = command.split(" ");
-        String commandType = parts[0];
+        String commandType = parts[0].toLowerCase();
 
         //test each command with their own method
         switch(commandType) {
@@ -21,12 +22,15 @@ public class CommandProcessor {
             case "deposit":
                 processDepositCommand(parts);
                 break;
-//            case "withdraw":
-//                processWithdrawCommand(parts);
-//                break;
-//            case "getapr":
-//                processGetAprCommand(parts);
-//                break;
+            case "withdraw":
+                processWithdrawCommand(parts);
+                break;
+            case "transfer":
+                processTransferCommand(parts);
+                break;
+            case "pass":
+                processPassCommand(parts);
+                break;
             default:
                 System.out.println("Invalid Command Passed to process");
                 return;
@@ -34,51 +38,33 @@ public class CommandProcessor {
 
         }
 
-    private void processDepositCommand(String[] parts) {
-        //[deposit, accoutnId, amount]
-        int id = Integer.parseInt(parts[1]);
-        double amount = Double.parseDouble(parts[2]);
-
-        Account account = bank.findAccount(id);
-
-        if(account == null) {
-            System.out.println("banking.Account not found");
-            return;
-        }
-        
-        account.deposit(amount);
+    private void processPassCommand(String[] parts) {
+        int months = Integer.parseInt(parts[1]);
+        bank.passTime(months);
     }
+
 
     private void processCreateCommand(String[] parts) {
         //read teh create command and then execute it using the bank classes
         //sk for account, ask fork account, then process command
         //[create, accType, accId, ]
-        String type = parts[1];
+        String type = parts[1].toLowerCase();
         int id = Integer.parseInt(parts[2]);
-
-        //optional object declaration for apr if included
-        Double apr = null; 
-        if(parts.length == 4) {
-            apr = Double.parseDouble(parts[3]);
-        }
+        double apr = Double.parseDouble(parts[3]);
 
         Account account = null;
         
         switch(type) {
             case "checking":
-                account = new Checking(id);
-                if(apr != null) {
-                    account.setAPR(apr);
-                }
+                account = new Checking(id, apr);
                 break;
             case "savings": 
-                account = new Savings(id);
-                if(apr !=  null) {
-                    account.setAPR(apr);
-                }
+                account = new Savings(id, apr);
                 break;
             case "cd":
-                account = new CD(id, apr);
+                double startAmount = Double.parseDouble(parts[4]);
+                int currentMonth = bank.getCurrentMonth();
+                account = new CD(id, apr, startAmount, currentMonth);
                 break;
             default:
                 //output when command syntax is valid but account type doesn't exist
@@ -86,6 +72,45 @@ public class CommandProcessor {
         }
 
         bank.addAccount(account);
+    }
+
+    private void processDepositCommand(String[] parts) {
+        //[deposit, accountId, amount]
+        int id = Integer.parseInt(parts[1]);
+        double amount = Double.parseDouble(parts[2]);
+
+        Account account = bank.findAccount(id);
+
+        if(account == null) {
+            System.out.println("banking.Account not found");
+            //return false;
+        }
+        
+        bank.deposit(id, amount);
+    }
+
+    private void processWithdrawCommand(String[] parts) {
+        //[deposit, accountId, amount]
+        int id = Integer.parseInt(parts[1]);
+        double amount = Double.parseDouble(parts[2]);
+
+        Account account = bank.findAccount(id);
+
+        if(account == null) {
+            System.out.println("banking.Account not found");
+            //return false;
+        }
+        
+        bank.withdraw(id, amount);
+    }
+
+    private void processTransferCommand(String[] parts) {
+        int fromAccount = Integer.parseInt(parts[1]);
+        int toAccount = Integer.parseInt(parts[2]);
+        double amount = Double.parseDouble(parts[3]);
+
+        bank.transfer(fromAccount, toAccount, amount);
+
     }
 
 }

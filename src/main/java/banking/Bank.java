@@ -1,6 +1,8 @@
 package banking;
 
-import java.util.HashMap;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
@@ -17,13 +19,13 @@ public class Bank {
 
     //dependency injection
     public Bank(TimeService timeService) {
-        accounts = new HashMap<>();
+        accounts = new LinkedHashMap<>();
         this.timeService = timeService;
     }
 
 
     public Map<Integer, Account> getAccounts() {//a list of all the accounts stored, with a key to each account
-        return new HashMap<>(accounts);//retrieve bank account info
+        return new LinkedHashMap<>(accounts);//retrieve bank account info
     }
     //make a method that looks for an id based off a number
 
@@ -86,17 +88,17 @@ public class Bank {
         if (amount <= 0) {
             throw new IllegalArgumentException("Withdrawal amount must be greater than 0");
         }
-        
+
         Account toAccount = findAccount(toAccountId);
         Account fromAccount = findAccount(fromAccountId);
 
         // Check if the accounts exist
-        if(toAccount == null || fromAccount == null){
+        if (toAccount == null || fromAccount == null) {
             return false;
         }
 
         // Transfer the as much money from the account as possible if the amount exceeds balance
-        if (amount > fromAccount.getBalance()){
+        if (amount > fromAccount.getBalance()) {
             System.out.println("Insufficient funds, transferred max possible value");
             //return false;
             //deposit the balance of the account to the new account and then withdraw from the whole account
@@ -125,9 +127,9 @@ public class Bank {
 
     // Time passing functionality
     public void passTime(int numMonths) {
-        for (int i=0; i < numMonths; i++) {
+        for (int i = 0; i < numMonths; i++) {
             // advance months with each iteration
-            timeService.advanceMonth(numMonths);
+            timeService.advanceMonth(1);
             closeEmptyAccounts();
             deductFromLowAccounts();
             accrueAPR();
@@ -136,10 +138,10 @@ public class Bank {
 
     private void closeEmptyAccounts() {
         List<Account> accountsToRemove = new ArrayList<>();
-        
+
         // mark accounts with 0 balance for removal
-        for(Account a : accounts.values()) {
-            if (a.getBalance() == 0){
+        for (Account a : accounts.values()) {
+            if (a.getBalance() == 0) {
                 accountsToRemove.add(a);
             }
         }
@@ -150,9 +152,9 @@ public class Bank {
         }
     }
 
-    private void deductFromLowAccounts() {       
+    private void deductFromLowAccounts() {
         for (Account a : accounts.values()) {
-            if(a.getBalance() < 100) {
+            if (a.getBalance() < 100) {
                 // doesnt interfere w/ savings account restrictions
                 a.setBalance(a.getBalance() - 25);
             }
@@ -160,17 +162,47 @@ public class Bank {
     }
 
     private void accrueAPR() {
-        //Todo iterate for cd accounts and accrue the apr 4 times within a month
-        //List<Account> cdAccountsToAccrue = new ArrayList<>();
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        decimalFormat.setRoundingMode(RoundingMode.FLOOR);
 
-        for (Account a: accounts.values()) {
-            // retrieve apr, convert to a percentage, divide by months ina year
-            double monthlyInterest = (a.getAPR()/100)/12;
-            double monthlyYield = a.getBalance() * monthlyInterest; 
-            deposit(a.getAccountId(), monthlyYield);
+        for (Account a : accounts.values()) {
+            if (a instanceof CD) {
+                // Special handling for CDs - interest 4 times per month
+                double balance = a.getBalance();
+                double aprDecimal = a.getAPR() / 100;
+                double monthlyRate = aprDecimal / 12;
+
+                // Accrue interest four times
+                for (int i = 0; i < 4; i++) {
+                    // Calculate interest based on current balance
+                    double interestAmount = balance * monthlyRate;
+
+                    // Truncate to 2 decimal places
+                    interestAmount = Double.parseDouble(decimalFormat.format(interestAmount));
+
+                    // Add to balance for next calculation
+                    balance += interestAmount;
+                }
+
+                // Calculate total interest earned
+                double totalInterestEarned = balance - a.getBalance();
+
+                // Deposit the interest
+                deposit(a.getAccountId(), totalInterestEarned);
+            } else {
+                // Regular accounts (checking and savings)
+                double monthlyInterest = (a.getAPR() / 100) / 12;
+                double monthlyYield = a.getBalance() * monthlyInterest;
+
+                // Truncate to 2 decimal places
+                double truncatedYield = Double.parseDouble(decimalFormat.format(monthlyYield));
+
+                // Deposit the interest
+                a.setBalance(a.getBalance() + truncatedYield);
+            }
+
         }
-        // CD needs to accrue four times within a month
-
     }
+
 }
 

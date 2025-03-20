@@ -1,16 +1,11 @@
 package banking;
 
 public class Savings extends Account{
-    public Savings(int accId) {
-        super(accId, 0);
-    }
+    private int lastWithdrawalMonth;
 
-    public Savings(int accId, double balance) {
-        super( accId, balance );
-    }
-
-    public Savings(int accId, double balance, double apr) {
-        super( accId, balance, apr);
+    public Savings(int accId, double apr) {
+        super( accId, apr);
+        lastWithdrawalMonth = -1;
     }
 
     @Override
@@ -25,7 +20,12 @@ public class Savings extends Account{
     }
 
     @Override
-    public boolean withdraw(double money) {
+    public boolean withdraw(double money, int currentMonth) {
+        if(lastWithdrawalMonth == currentMonth) {
+            System.out.println("Cannot withdraw more than once in a month");
+            return false;
+        }
+
         //withdrawal limit
         if(money > 1000) {
             System.out.println("Cannot withdraw More than 1000 at a time");
@@ -35,8 +35,11 @@ public class Savings extends Account{
         if (balance >= money) {
             super.setBalance(super.getBalance() - money);
         } else {
-            balance = 0;
+            //if the amount exceeds the balance, then take as much money from the account as possible
+            super.setBalance(0);
         }
+
+        lastWithdrawalMonth = currentMonth;
         return true;
 
     }

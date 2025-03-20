@@ -8,6 +8,19 @@ public class CommandValidator {
         this.bank = bank;
     }
 
+    //getter
+    public Bank getBank() {
+        return bank;
+    }
+
+    protected boolean accountDoesNotExist(int accountId) {
+        return !bank.accountExistsByID(accountId);
+    }
+
+    protected boolean accountAlreadyExists(int accountId) {
+        return bank.accountExistsByID(accountId);
+    }
+
     public static CommandValidator getValidator(String commandType, Bank bank) {
         //check the first field and delegate to child class
         switch(commandType) {
@@ -15,6 +28,12 @@ public class CommandValidator {
                 return new CreateValidator(bank);
             case "deposit":
                 return new DepositValidator(bank);
+            case "transfer":
+                return new TransferValidator(bank);
+            case "withdraw":
+                return new WithdrawValidator(bank);
+            case "pass":
+                return new PassTimeValidator(bank);
             default:
                 //output when command syntax is valid but type doesn't exist
                 return new CommandValidator(bank);
@@ -28,7 +47,7 @@ public class CommandValidator {
 
 
     public int getMinimumPartsRequired() {
-        return 3;
+        return 2;
     }
 
 

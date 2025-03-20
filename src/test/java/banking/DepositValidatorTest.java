@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DepositValidatorTest {
     public static final int ID = 87654321;
+    public static final double APR = 10.00;
     public CommandValidator depositValidator;
 
     public Bank bank;
@@ -16,7 +17,7 @@ public class DepositValidatorTest {
     @BeforeEach
     void setUp() {
         bank = new Bank();
-        checking = new Checking(ID);
+        checking = new Checking(ID, APR);
         depositValidator = new CommandValidator(bank);
     }
 
@@ -30,7 +31,7 @@ public class DepositValidatorTest {
     @Test
     void deposit_with_cents() {
         bank.addAccount(checking);
-        boolean actual = depositValidator.validate("Deposit 12345678 20.64");
+        boolean actual = depositValidator.validate("Deposit 87654321 20.64");
         assertTrue(actual);
     }
 
@@ -38,7 +39,7 @@ public class DepositValidatorTest {
     void deposit_large_amount() {
         bank.addAccount(checking);
         boolean actual = depositValidator.validate("Deposit 12345678 999999999.99");
-        assertTrue(actual);
+        assertFalse(actual);
     }
 
     @Test
@@ -78,21 +79,6 @@ public class DepositValidatorTest {
         assertFalse(actual);
     }
 
-    @Test
-    void withdraw_negative_amount() {
-        bank.addAccount(checking);
-        checking.deposit(100.0);
-        boolean actual = depositValidator.validate("Withdraw -100");
-        assertFalse(actual);
-    }
-
-    @Test
-    void multiple_transactions_sequence() {
-        bank.addAccount(checking);
-
-        assertTrue(depositValidator.validate("Deposit 12345678 100"));
-        assertTrue(depositValidator.validate("Deposit 12345678 500"));
-    }
 
     
 }

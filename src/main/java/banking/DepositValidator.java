@@ -1,7 +1,6 @@
 package banking;
 
 public class DepositValidator extends  CommandValidator{
-    Bank bank = new Bank();
 
     public DepositValidator(Bank bank) {
         super(bank);
@@ -10,12 +9,6 @@ public class DepositValidator extends  CommandValidator{
 
     //Override methods
 
-    //commented out until other transaction validators are implemented
-//    @Override
-//    public int getMinimumPartsRequired() {
-//        return 3;
-//    }
-
     @Override
     public boolean validateSpecific(String[] command) {
         //store the specific command types
@@ -23,7 +16,6 @@ public class DepositValidator extends  CommandValidator{
         String commandType = command[0].toLowerCase();
         String accIdStr = command[1];
         String amount = command[2];
-
 
         if(bank.getAccounts().isEmpty()) {
             return false;
@@ -36,18 +28,17 @@ public class DepositValidator extends  CommandValidator{
             return false;
         }
 
-        //run validation methods
-        if (!isValidAccountID(accIdStr)) {
-            System.out.println("Invalid account ID");
-            return false;
-        }
+//        //run validation methods
+//        if (!isValidAccountID(accIdStr)) {
+//            System.out.println("Invalid account ID");
+//            return false;
+//        }
         int accId = Integer.parseInt(accIdStr);
 
-        if(bank.accountExistsByID(accId)) {
-            System.out.println("banking.Account ID already exists");
+        if(!bank.accountExistsByID(accId)) {
+            System.out.println("banking.Account ID doesn't exist");
             return false;
         }
-
 
 
         if (!super.isValidAmount(amount)) {
@@ -55,7 +46,19 @@ public class DepositValidator extends  CommandValidator{
             return false;
         }
 
-        return true;
+
+        Account account = bank.findAccount(accId);
+        double depositAmount = Double.parseDouble(amount);
+
+        if (account instanceof Checking && depositAmount > 400) {
+            System.out.println("Deposit amount exceeds 400 for checking account");
+            return false;
+        } else if (account instanceof  Checking && depositAmount < 400) {
+            return true;
+        }
+
+        return account instanceof Savings && depositAmount <= 2500;
+
     }
 
     //Deposit validation helpers

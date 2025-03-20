@@ -6,17 +6,18 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 //test to see if changes are updated to the right branch
 
-public class AccountTest {
-    public static final double APR = 11.0;
+public class CheckingAccountTest {
+    public static final double APR = 10.0;
     public static final int MONEY_AMOUNT = 20;
     public static final int QUICK_ID = 12345678;
+    public static final int CURENT_MONTH = 0;
     //all banks require an 8-digit ID, an APR value from 0-10(decimals included)
     public Account checking; //reference for any calls to an account
 
 
     @BeforeEach
     public void setUp() {
-        checking = new Checking(QUICK_ID);
+        checking = new Checking(QUICK_ID, APR);
     }
 
     @Test
@@ -54,7 +55,7 @@ public class AccountTest {
     @Test
     public void withdraw_10_dollars_from_account() {
         checking.deposit(MONEY_AMOUNT);
-        checking.withdraw(10);//take 10 from account
+        checking.withdraw(10, CURENT_MONTH);//take 10 from account
         double actual = checking.getBalance();
 
         assertEquals(10, actual);
@@ -63,8 +64,8 @@ public class AccountTest {
     @Test
     public void withdraw_multiple_times() {
         checking.deposit(MONEY_AMOUNT);
-        checking.withdraw(10);
-        checking.withdraw(11);//withdrawing past the amount to ensure the withdrawal still operates properly
+        checking.withdraw(10, CURENT_MONTH);
+        checking.withdraw(11, CURENT_MONTH);//withdrawing past the amount to ensure the withdrawal still operates properly
         double actual = checking.getBalance();
 
         assertEquals(0,actual);
@@ -72,10 +73,12 @@ public class AccountTest {
 
     @Test
     public void cant_withdraw_past_zero() {//if withdrawal exceeds the balance, then withdraw the max amount(?)
-        checking.withdraw(MONEY_AMOUNT);
+        checking.withdraw(MONEY_AMOUNT, CURENT_MONTH);
         double actual = checking.getBalance();
 
         assertEquals(0,actual);
 
     }
+
+    
 }
