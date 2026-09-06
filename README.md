@@ -1,93 +1,140 @@
 # Banking Project
 
+A command-driven banking simulator written in Java. The system reads a list of text commands, validates each one, applies the valid ones to an in-memory bank, and produces a report of final account states, per-account transaction history, and rejected commands.
 
+Built as a course project at Drexel University with a test-first workflow — JUnit 5, JaCoCo line coverage, and PIT mutation testing.
 
-## Getting started
+## How it works
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+The system is a pipeline. There is no `main` method; `MasterControl` is the entry point and is exercised through the test suite.
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/se1816574505/haw56-harrington-wheeler-winter-2025-002-se181-course-project.git
-git branch -M main
-git push -uf origin main
+List<String> input
+      │
+      ▼
+CommandValidator ──► delegates to CreateValidator / DepositValidator /
+      │              WithdrawValidator / TransferValidator / PassTimeValidator
+      │
+      ├─ valid ────► CommandProcessor ──► Bank ──► Checking / Savings / CD
+      │                                     │
+      │                                TimeService
+      │
+      └─ invalid ──► CommandStorage
+                          │
+                          ▼
+                   OutputGenerator ──► List<String>
 ```
 
-## Integrate with your tools
+- **`MasterControl`** — loops over the input, routes each command to validation, processing, and storage.
+- **`CommandValidator`** — parses the command word and hands off to a type-specific subclass. Base class returns `false`, so unrecognized command types are rejected.
+- **`CommandProcessor`** — converts a validated command string into calls on `Bank`.
+- **`Bank`** — owns the accounts (a `LinkedHashMap` keyed by account ID) and the time service. Handles deposits, withdrawals, transfers, and month-passing.
+- **`Account`** — abstract base for `Checking`, `Savings`, and `CD`. Each subclass enforces its own deposit and withdrawal rules.
+- **`TimeService` / `BankTimeService`** — month counter behind an interface so tests can inject a fake clock.
+- **`CommandStorage`** — keeps valid and invalid commands in the order they arrived.
+- **`OutputGenerator`** — formats the final report.
 
-- [ ] [Set up project integrations](https://gitlab.com/se1816574505/haw56-harrington-wheeler-winter-2025-002-se181-course-project/-/settings/integrations)
+## Command language
 
-## Collaborate with your team
+Commands are space-delimited and case-insensitive on the command word. Account IDs must be exactly 8 digits.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+| Command | Syntax | Notes |
+|---|---|---|
+| Create | `create checking <id> <apr>` | APR must be greater than 0 and at most 10 |
+| Create | `create savings <id> <apr>` | |
+| Create | `create cd <id> <apr> <amount>` | Opening amount must be between 1000 and 10000 |
+| Deposit | `deposit <id> <amount>` | |
+| Withdraw | `withdraw <id> <amount>` | |
+| Transfer | `transfer <from-id> <to-id> <amount>` | Source and destination must differ |
+| Pass time | `pass <months>` | 1 to 60 months |
 
-## Test and Deploy
+Example:
 
-Use the built-in continuous integration in GitLab.
+```
+create savings 12345678 0.6
+deposit 12345678 700
+create checking 98765432 0.1
+transfer 12345678 98765432 300
+pass 12
+```
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+### Account rules
 
-***
+**Checking**
+- Withdrawals capped at 400 per transaction.
+- Deposits capped at 1000 by the account; the deposit validator currently rejects anything at or above 400.
 
-# Editing this README
+**Savings**
+- Deposits capped at 2500.
+- Withdrawals capped at 1000 and limited to one per month.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+**CD**
+- Opened with a lump sum between 1000 and 10000. No deposits afterward.
+- No withdrawals until 12 months have passed, and the withdrawal must take the entire balance.
+- Interest compounds four times per month instead of once.
 
-## Suggestions for a good README
+### Passing time
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+For each month elapsed, `Bank.passTime` runs three steps in order:
 
-## Name
-Choose a self-explaining name for your project.
+1. Close any account with a balance of 0.
+2. Deduct 25 from any account with a balance below 100.
+3. Accrue interest — monthly rate is `APR / 100 / 12`, truncated (not rounded) to two decimal places.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+### Output format
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+Each surviving account prints as `<Type> <id> <balance> <apr>`, followed by the transactions that touched it, in order. Invalid commands are echoed verbatim at the end.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+```
+Savings 12345678 400.00 0.60
+transfer 12345678 98765432 300
+Checking 98765432 300.00 0.00
+transfer 12345678 98765432 300
+depositt 12345678 100
+```
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+Balances and APRs are truncated toward zero to two decimals, not rounded.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+## Requirements
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+- JDK 11 or later
+- Gradle 8.10
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+The `gradle/wrapper` directory is present but the `gradlew` scripts are not committed, so use a locally installed Gradle. To regenerate the wrapper:
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+```bash
+gradle wrapper --gradle-version 8.10
+```
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+## Build and test
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+```bash
+gradle build          # compile and run tests
+gradle test           # tests only
+gradle jacocoTestReport   # coverage → builds/jacoco/jacoco.xml
+gradle pitest         # mutation coverage → build/reports/pitest/
+```
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+The test suite lives in `src/test/java/banking` and covers the bank, each account type, each validator, the time service, and end-to-end scenarios through `MasterControl`.
 
-## License
-For open source projects, say how it is licensed.
+## Project structure
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+```
+src/main/java/banking/     domain and application classes
+src/test/java/banking/     JUnit 5 test suite
+build.gradle               Java, JaCoCo, and PIT configuration
+.gitlab-ci.yml             CI pipeline (build, test, code quality, mutation coverage)
+.codeclimate.yml           static analysis configuration
+```
+
+## Known gaps
+
+- `Checking` discards the APR passed to its constructor and always reports 0.00.
+- The withdraw validator allows savings withdrawals up to 2500, while the `Savings` account itself rejects anything over 1000 — the command is accepted but silently does nothing.
+- The savings one-withdrawal-per-month rule is enforced in the account but not in the validator, so a second withdrawal in the same month is reported as valid.
+- Validators index into the command array before checking its length, so short commands such as `create checking` raise an `ArrayIndexOutOfBoundsException` rather than being rejected.
+- `pass` with a non-numeric argument throws a `NumberFormatException`.
+- The monthly low-balance deduction applies to CDs along with everything else.
+- `CommandProcessorTest` is an empty placeholder.
+- CI is configured for GitLab; the pipeline does not run on GitHub.
+- Build output and IDE files (`.gradle/`, `.idea/`, `bin/`) are tracked in version control. The project has no `.gitignore`.
